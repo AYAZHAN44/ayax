@@ -1,0 +1,1836 @@
+
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="theme-color" content="#080810">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>DR.AYAZHAN — Стоматологиялық клиника</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --red:#C0001A;--red2:#E8001F;--red-glow:rgba(192,0,26,0.25);
+  --dark:#080810;--dark2:#10101a;--surface:#161622;--card:#1e1e2e;
+  --glass:rgba(255,255,255,0.04);--glass2:rgba(255,255,255,0.07);
+  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.12);
+  --white:#FAFAF8;--muted:rgba(255,255,255,0.38);--muted2:rgba(255,255,255,0.6);
+  --accent:#ff6b6b;--gold:#d4a843;
+  --green:#22c55e;--blue:#3b82f6;
+  --r:18px;--r-sm:12px;--r-lg:24px;
+  --nav-h:60px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex;flex-direction:column}
+button,input,select,textarea{font-family:'Outfit',sans-serif;cursor:pointer}
+img{max-width:100%}
+
+/* LANG SWITCHER */
+.lang-switcher{display:flex;background:var(--glass);border:1px solid var(--border);border-radius:10px;padding:3px;gap:2px;flex-shrink:0}
+.lang-btn{padding:5px 10px;border-radius:7px;border:none;background:transparent;color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.5px;transition:all .2s}
+.lang-btn.active{background:var(--red);color:white;box-shadow:0 2px 8px var(--red-glow)}
+
+/* NOTIFICATION BANNER */
+.notif-banner{
+  background:linear-gradient(135deg,rgba(192,0,26,0.15),rgba(139,0,0,0.1));
+  border-bottom:1px solid rgba(192,0,26,0.3);
+  padding:10px 16px;
+  display:flex;align-items:center;gap:10px;
+  cursor:pointer;
+  animation:slideBanner .4s ease;
+  position:relative;z-index:99;
+}
+@keyframes slideBanner{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.notif-banner-dot{width:8px;height:8px;background:var(--red);border-radius:50%;flex-shrink:0;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+.notif-banner-text{flex:1;font-size:13px;font-weight:600;color:var(--white)}
+.notif-banner-text span{color:rgba(255,150,150,.9);font-size:11px;display:block;margin-top:2px}
+.notif-banner-arrow{font-size:16px;color:var(--red);flex-shrink:0}
+
+/* WELCOME SCREEN */
+#welcomeScreen{background:var(--dark);flex-direction:row;min-height:100vh;position:relative;overflow:hidden}
+#welcomeScreen::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 800px 600px at 20% 50%,rgba(192,0,26,.12) 0%,transparent 70%),radial-gradient(ellipse 400px 400px at 80% 80%,rgba(192,0,26,.06) 0%,transparent 70%);pointer-events:none;z-index:0}
+.welcome-left{flex:1;display:flex;flex-direction:column;justify-content:center;padding:60px 64px;position:relative;z-index:1;border-right:1px solid var(--border)}
+.wl-brand{margin-bottom:48px}
+.wl-logo{width:60px;height:60px;background:linear-gradient(135deg,var(--red),#8b0000);border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:18px;box-shadow:0 0 40px rgba(192,0,26,.35),0 8px 24px rgba(0,0,0,.4)}
+.wl-logo svg{width:32px;height:32px;fill:white}
+.wl-brand h1{font-family:'Playfair Display',serif;font-size:46px;font-weight:900;color:var(--white);line-height:1;letter-spacing:-1px}
+.wl-brand h1 em{color:var(--red);font-style:normal}
+.wl-brand p{color:var(--red);font-size:12px;margin-top:8px;letter-spacing:3px;text-transform:uppercase;font-weight:700}
+.wl-tagline h2{font-family:'Playfair Display',serif;font-size:32px;color:var(--white);line-height:1.25;margin-bottom:14px;font-weight:700}
+.wl-tagline p{color:var(--muted);font-size:14px;line-height:1.75;max-width:400px}
+.wl-awards{display:flex;gap:8px;margin-top:24px;flex-wrap:wrap}
+.wl-award{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;background:var(--glass);border:1px solid var(--border);border-radius:30px;font-size:11px;color:var(--muted2)}
+.wl-award svg{width:13px;height:13px;fill:var(--gold);flex-shrink:0}
+.wl-stats{display:flex;gap:0;margin-top:36px;border-top:1px solid var(--border);padding-top:28px}
+.wl-stat{flex:1;padding-right:24px;border-right:1px solid var(--border)}
+.wl-stat:last-child{border:none;padding-left:24px;padding-right:0}
+.wl-stat:not(:first-child):not(:last-child){padding:0 24px}
+.wl-stat-n{font-family:'Playfair Display',serif;font-size:32px;font-weight:900;color:var(--white)}
+.wl-stat-n em{color:var(--red);font-style:normal}
+.wl-stat-l{font-size:11px;color:var(--muted);margin-top:3px;letter-spacing:.5px}
+.welcome-right{width:420px;display:flex;flex-direction:column;justify-content:center;padding:40px 36px;position:relative;z-index:1;background:rgba(255,255,255,.02)}
+.welcome-right-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.auth-tabs{display:flex;background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:3px;margin-bottom:24px}
+.auth-tab{flex:1;padding:9px 6px;background:transparent;border:none;color:var(--muted);font-size:12px;font-weight:600;border-radius:9px;transition:all .3s;letter-spacing:.3px}
+.auth-tab.active{background:var(--red);color:white;box-shadow:0 4px 14px var(--red-glow)}
+.auth-title{font-family:'Playfair Display',serif;font-size:28px;color:var(--white);margin-bottom:4px;font-weight:700}
+.auth-sub{font-size:12px;color:var(--muted);margin-bottom:22px}
+.f-group{margin-bottom:14px}
+.f-group label{display:block;font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:1.2px;text-transform:uppercase;font-weight:600}
+.f-group input,.f-group select{width:100%;padding:13px 14px;background:var(--glass);border:1px solid var(--border);border-radius:11px;color:var(--white);font-size:14px;outline:none;transition:all .3s}
+.f-group input::placeholder{color:rgba(255,255,255,.2)}
+.f-group input:focus{border-color:rgba(192,0,26,.6);background:rgba(192,0,26,.06);box-shadow:0 0 0 3px rgba(192,0,26,.1)}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn-auth{width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:14px;font-weight:700;letter-spacing:.5px;margin-top:6px;transition:all .3s;box-shadow:0 8px 28px rgba(192,0,26,.35)}
+.btn-auth:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(192,0,26,.45)}
+.auth-switch{text-align:center;margin-top:14px;font-size:12px;color:var(--muted)}
+.auth-switch a{color:rgba(220,50,50,.9);cursor:pointer;font-weight:600}
+.doc-credentials{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:16px}
+.doc-credentials p{font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;font-weight:600}
+.doc-cred-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;cursor:pointer;transition:background .2s;border-bottom:1px solid var(--border)}
+.doc-cred-item:last-child{border:none}
+.doc-cred-item:hover{background:rgba(255,255,255,.05)}
+.doc-cred-item span{font-size:11px;color:var(--muted2)}
+.doc-cred-item code{font-size:10px;color:rgba(192,0,26,.9);background:rgba(192,0,26,.1);padding:2px 7px;border-radius:5px;font-family:monospace}
+
+/* CLIENT NAV */
+#clientApp{background:var(--dark2)}
+.c-nav{background:var(--dark);height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+.c-nav-left{display:flex;align-items:center;gap:10px;min-width:0}
+.menu-btn{width:38px;height:38px;border:1px solid var(--border);border-radius:10px;background:var(--glass);color:var(--white);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+.menu-btn:hover{background:rgba(192,0,26,.12);border-color:rgba(192,0,26,.35)}
+.menu-btn svg{width:21px;height:21px}
+
+/* NAV auth buttons */
+.nav-auth-btns{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.nav-auth-btn{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--glass);color:var(--muted2);font-size:11px;font-weight:700;transition:all .2s;white-space:nowrap}
+.nav-auth-btn.primary{background:linear-gradient(135deg,var(--red),#8b0000);border-color:transparent;color:white;box-shadow:0 2px 10px var(--red-glow)}
+.nav-auth-btn:hover{opacity:.85}
+
+/* DRAWER */
+.drawer-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.58);z-index:250;opacity:0;pointer-events:none;transition:opacity .22s}
+.drawer-backdrop.open{opacity:1;pointer-events:auto}
+.side-menu{position:fixed;top:0;left:0;bottom:0;width:min(310px,88vw);background:#0d0d16;border-right:1px solid var(--border);z-index:260;transform:translateX(-105%);transition:transform .25s ease;box-shadow:20px 0 60px rgba(0,0,0,.35);padding:18px;display:flex;flex-direction:column;gap:12px;overflow-y:auto}
+.side-menu.open{transform:translateX(0)}
+.side-menu-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border);flex-shrink:0}
+.side-menu-brand{font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--white)}
+.side-menu-brand em{color:var(--red);font-style:normal}
+.side-close{width:34px;height:34px;border:1px solid var(--border);border-radius:9px;background:var(--glass);color:var(--muted2);font-size:22px;line-height:1;flex-shrink:0}
+.side-menu-section{display:grid;gap:6px}
+.side-section-label{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;padding:4px 13px}
+.side-menu-btn{width:100%;display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:11px;border:1px solid transparent;background:transparent;color:var(--muted2);font-size:13px;font-weight:700;text-align:left;transition:all .2s}
+.side-menu-btn:hover,.side-menu-btn.active{background:rgba(192,0,26,.12);border-color:rgba(192,0,26,.25);color:var(--white)}
+.side-menu-btn svg{width:17px;height:17px;fill:currentColor;flex-shrink:0}
+/* Auth section in drawer */
+.side-auth-section{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);flex-shrink:0}
+.side-auth-section-title{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;padding:0 3px}
+.side-auth-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.side-auth-tile{padding:12px 10px;border-radius:12px;border:1px solid var(--border);background:var(--glass);color:var(--white);font-size:12px;font-weight:700;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .2s}
+.side-auth-tile svg{width:18px;height:18px;fill:currentColor;opacity:.7}
+.side-auth-tile.highlight{background:linear-gradient(135deg,rgba(192,0,26,.2),rgba(139,0,0,.1));border-color:rgba(192,0,26,.3);color:rgba(255,150,150,.95)}
+.side-auth-tile:hover{background:rgba(192,0,26,.15);border-color:rgba(192,0,26,.35)}
+.side-divider{height:1px;background:var(--border);margin:6px 0}
+
+/* user info in nav when logged in */
+.c-nav-user-info{display:flex;align-items:center;gap:8px;overflow:hidden}
+.c-nav-user-text{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px}
+.c-nav-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),#8b0000);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700;box-shadow:0 0 12px var(--red-glow);flex-shrink:0}
+.c-nav-logout{background:var(--glass);border:1px solid var(--border);color:var(--muted2);padding:6px 10px;border-radius:8px;font-size:11px;font-weight:600;transition:all .2s;white-space:nowrap;flex-shrink:0}
+.c-nav-logout:hover{background:rgba(192,0,26,.15);color:white;border-color:rgba(192,0,26,.4)}
+.c-page-title{font-size:15px;font-weight:800;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* BOTTOM NAV */
+.c-bottom-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;
+  background:rgba(8,8,16,.95);
+  border-top:1px solid var(--border);
+  backdrop-filter:blur(20px);
+  z-index:200;
+  padding:6px 0 max(6px, env(safe-area-inset-bottom));
+}
+.c-bottom-nav-inner{display:flex;justify-content:space-around;align-items:center}
+.c-bnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border:none;background:transparent;color:var(--muted);font-size:9px;font-weight:600;letter-spacing:.5px;transition:all .2s;min-width:52px;-webkit-tap-highlight-color:transparent}
+.c-bnav-btn svg{width:20px;height:20px;transition:transform .2s}
+.c-bnav-btn.active{color:var(--red)}
+.c-bnav-btn.active svg{transform:scale(1.15)}
+.c-bnav-badge{position:absolute;top:-2px;right:-2px;width:8px;height:8px;background:var(--red);border-radius:50%;border:1.5px solid var(--dark)}
+.c-bnav-icon-wrap{position:relative}
+
+/* desktop tabs */
+.c-tabs{display:none !important;background:var(--dark);border-bottom:1px solid var(--border);position:sticky;top:var(--nav-h);z-index:90;overflow-x:auto;padding:0 16px}
+.c-tabs::-webkit-scrollbar{display:none}
+.c-tab{flex:none;padding:0 16px;height:46px;background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-size:13px;font-weight:600;white-space:nowrap;transition:all .25s;display:flex;align-items:center;gap:6px}
+.c-tab.active{border-bottom-color:var(--red);color:var(--white)}
+.c-tab-icon{width:15px;height:15px;opacity:.6}
+.c-tab.active .c-tab-icon{opacity:1}
+
+.c-content{padding:16px;max-width:100%;padding-bottom:24px}
+.page{display:none;animation:fadeUp .3s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* PROFILE CARD */
+.profile-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:16px;position:relative;overflow:hidden}
+.profile-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),transparent)}
+.profile-card-inner{display:flex;align-items:center;gap:16px}
+.profile-avatar-big{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--red),#8b0000);display:flex;align-items:center;justify-content:center;color:white;font-size:22px;font-weight:900;flex-shrink:0;box-shadow:0 0 20px var(--red-glow)}
+.profile-info{flex:1;min-width:0}
+.profile-name{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--white);margin-bottom:4px}
+.profile-phone{font-size:13px;color:var(--muted2);font-weight:500}
+.profile-phone svg{width:12px;height:12px;fill:var(--red);margin-right:4px;vertical-align:middle}
+.profile-stats{display:flex;gap:0;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+.ps-item{flex:1;text-align:center;border-right:1px solid var(--border)}
+.ps-item:last-child{border:none}
+.ps-n{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--red)}
+.ps-l{font-size:10px;color:var(--muted);margin-top:2px;font-weight:600;letter-spacing:.5px}
+
+/* HERO */
+.hero{background:var(--dark);border-radius:var(--r-lg);overflow:hidden;margin-bottom:16px;border:1px solid var(--border);position:relative}
+.hero-inner{padding:24px;position:relative;z-index:2}
+.hero::before{content:'';position:absolute;inset:0;background:linear-gradient(125deg,#080810 0%,#1a0008 50%,#240012 100%)}
+.hero-glow{position:absolute;width:300px;height:300px;background:radial-gradient(circle,rgba(192,0,26,.2) 0%,transparent 65%);top:-100px;right:-60px;z-index:1}
+.hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(192,0,26,.15);border:1px solid rgba(192,0,26,.3);color:rgba(255,255,255,.8);padding:4px 12px;border-radius:30px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.hero-inner h2{font-family:'Playfair Display',serif;font-size:28px;font-weight:900;color:white;line-height:1.15;margin-bottom:8px;letter-spacing:-.5px}
+.hero-inner p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6}
+.hero-stats{display:flex;gap:0;margin-top:20px;padding-top:16px;border-top:1px solid rgba(255,255,255,.06);flex-wrap:wrap}
+.hs-item{flex:1;min-width:60px;padding:0 12px;border-right:1px solid rgba(255,255,255,.06)}
+.hs-item:first-child{padding-left:0}
+.hs-item:last-child{border:none}
+.hs-n{font-family:'Playfair Display',serif;font-size:24px;color:white;font-weight:900;line-height:1}
+.hs-n em{color:var(--red);font-style:normal}
+.hs-l{font-size:10px;color:rgba(255,255,255,.3);margin-top:3px;font-weight:500}
+
+/* CONTACT */
+.sec-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);transition:border-color .2s}
+.card-pad{padding:18px}
+.contact-row{display:flex;gap:8px;flex-wrap:wrap}
+.c-link{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:30px;font-size:12px;font-weight:600;border:1.5px solid var(--border2);background:var(--glass);color:var(--muted2);transition:all .25s;white-space:nowrap}
+.c-link:hover,.c-link:active{background:var(--red);color:white;border-color:var(--red);transform:translateY(-1px);box-shadow:0 6px 18px var(--red-glow)}
+.c-link.wa:hover,.c-link.wa:active{background:#25D366;border-color:#25D366;box-shadow:0 6px 18px rgba(37,211,102,.3)}
+.c-link.ig:hover,.c-link.ig:active{background:linear-gradient(135deg,#f09433,#e6683c,#dc2743);border-color:#dc2743}
+
+/* HISTORY */
+.history-block{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:20px;margin-bottom:16px}
+.hb-header{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.hb-icon{width:44px;height:44px;background:rgba(192,0,26,.12);border:1px solid rgba(192,0,26,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.hb-icon svg{width:20px;height:20px;fill:var(--red)}
+.hb-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--white)}
+.hb-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.history-text{font-size:13px;color:var(--muted2);line-height:1.8}
+.history-timeline{margin-top:18px;padding-top:16px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hm-card{background:var(--glass);border:1px solid var(--border);border-radius:12px;padding:14px}
+.hm-year{font-family:'Playfair Display',serif;font-size:26px;font-weight:900;color:var(--red);line-height:1;margin-bottom:5px}
+.hm-text{font-size:11px;color:var(--muted);line-height:1.6}
+
+/* BEFORE/AFTER */
+.ba-section{margin-bottom:16px}
+.ba-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.ba-tab{padding:7px 14px;border-radius:30px;border:1.5px solid var(--border);background:transparent;font-size:11px;font-weight:600;color:var(--muted);transition:all .2s}
+.ba-tab.active{background:var(--white);color:var(--dark);border-color:var(--white)}
+.ba-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.ba-card{background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--border);transition:all .25s}
+.ba-pair{display:grid;grid-template-columns:1fr 1fr}
+.ba-img-slot{aspect-ratio:1;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.ba-img-slot img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.ba-lbl{position:absolute;bottom:0;left:0;right:0;padding:4px 6px;font-size:9px;font-weight:800;letter-spacing:1px;text-align:center;text-transform:uppercase}
+.ba-lbl.before{background:rgba(0,0,0,.7);color:rgba(255,255,255,.7)}
+.ba-lbl.after{background:rgba(192,0,26,.9);color:white}
+.ba-card-info{padding:10px 12px;border-top:1px solid var(--border)}
+.ba-card-info h5{font-size:12px;font-weight:700;color:var(--white)}
+.ba-card-info p{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* DOCTORS */
+.doc-grid{display:grid;grid-template-columns:1fr;gap:14px}
+.doc-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:18px;transition:all .25s}
+.doc-row{display:flex;gap:14px;align-items:flex-start}
+.doc-photo{width:64px;height:64px;border-radius:14px;object-fit:cover;flex-shrink:0;background:var(--surface)}
+.doc-photo-placeholder{width:64px;height:64px;border-radius:14px;background:linear-gradient(135deg,#1a0008,#3d0015);display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;flex-shrink:0}
+.doc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:2px}
+.doc-spec{font-size:11px;color:var(--red);font-weight:600;margin-bottom:2px}
+.doc-exp{font-size:11px;color:var(--muted);line-height:1.5}
+.doc-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.doc-tag{display:inline-block;background:var(--glass);color:var(--muted2);font-size:10px;font-weight:700;padding:3px 9px;border-radius:7px;border:1px solid var(--border)}
+.doc-tag.head{background:rgba(192,0,26,.12);color:rgba(255,100,100,.9);border-color:rgba(192,0,26,.2)}
+.doc-meta{display:flex;gap:0;margin-top:14px;padding-top:12px;border-top:1px solid var(--border)}
+.dm-item{flex:1;text-align:center;border-right:1px solid var(--border)}
+.dm-item:last-child{border:none}
+.dm-val{font-size:16px;font-weight:700;color:var(--white)}
+.dm-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+.btn-book{width:100%;padding:11px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:12px;font-weight:700;margin-top:12px;transition:all .25px;box-shadow:0 4px 14px var(--red-glow)}
+.btn-book:active{transform:scale(.98)}
+
+/* SERVICES */
+.svc-section{margin-bottom:24px}
+.svc-cat-header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.svc-cat-icon{width:40px;height:40px;border-radius:12px;flex-shrink:0;background:linear-gradient(135deg,rgba(192,0,26,.18),rgba(139,0,0,.1));border:1px solid rgba(192,0,26,.25);display:flex;align-items:center;justify-content:center;font-size:18px}
+.svc-cat-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--white)}
+.svc-cat-count{font-size:10px;color:var(--muted);font-weight:500;margin-top:1px}
+.svc-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.svc-card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:16px;display:flex;flex-direction:column;gap:12px;transition:all .3s;position:relative;overflow:hidden;cursor:pointer}
+.svc-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--red),transparent);opacity:0;transition:opacity .3s}
+.svc-card:active{transform:scale(.99)}
+.svc-card:hover::before{opacity:1}
+.svc-card-top{display:flex;align-items:flex-start;gap:12px}
+.svc-icon-wrap{width:40px;height:40px;border-radius:10px;flex-shrink:0;background:rgba(192,0,26,.08);border:1px solid rgba(192,0,26,.15);display:flex;align-items:center;justify-content:center}
+.svc-icon-wrap svg{width:18px;height:18px;fill:var(--red);opacity:.85}
+.svc-card-body{flex:1}
+.svc-name{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px;line-height:1.3}
+.svc-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.svc-card-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:10px}
+.svc-dur-badge{display:inline-flex;align-items:center;gap:4px;background:var(--glass);border:1px solid var(--border);padding:4px 9px;border-radius:20px;font-size:10px;color:var(--muted2);font-weight:500}
+.svc-dur-badge svg{width:10px;height:10px;fill:var(--muted)}
+.svc-price{font-family:'Playfair Display',serif;font-size:17px;font-weight:900;color:var(--red);white-space:nowrap}
+.svc-price.free{color:var(--green);font-size:14px;font-weight:700;font-family:'Outfit',sans-serif}
+
+/* BOOKING */
+.booking-layout{display:flex;flex-direction:column;gap:14px}
+.book-step{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:18px;margin-bottom:0}
+.book-step-head{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.bsh-num{width:28px;height:28px;background:linear-gradient(135deg,var(--red),#8b0000);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:800;flex-shrink:0}
+.bsh-title{font-size:14px;font-weight:700;color:var(--white)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border:1.5px solid var(--border);border-radius:30px;font-size:12px;font-weight:600;color:var(--muted2);background:transparent;margin:3px;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.chip.sel{background:rgba(192,0,26,.12);border-color:var(--red);color:rgba(255,150,150,.95)}
+.date-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.date-cell{background:var(--glass);border:1.5px solid var(--border);border-radius:9px;padding:6px 2px;text-align:center;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+.date-cell.sel{background:linear-gradient(135deg,var(--red),#8b0000);border-color:var(--red);box-shadow:0 3px 12px var(--red-glow)}
+.date-cell .dn{font-size:8px;font-weight:600;opacity:.45;color:inherit;letter-spacing:.3px}
+.date-cell .dd{font-size:13px;font-weight:800;color:inherit}
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.time-cell{background:var(--glass);border:1.5px solid var(--border);border-radius:9px;padding:10px 4px;text-align:center;cursor:pointer;font-size:11px;font-weight:700;transition:all .2s;color:var(--muted2);-webkit-tap-highlight-color:transparent}
+.time-cell.sel{background:linear-gradient(135deg,var(--red),#8b0000);border-color:var(--red);color:white;box-shadow:0 3px 12px var(--red-glow)}
+.time-cell.busy{background:transparent;color:rgba(255,255,255,.15);cursor:not-allowed;text-decoration:line-through;font-size:9px;border-color:rgba(255,255,255,.04)}
+.btn-confirm{width:100%;padding:14px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:12px;color:white;font-size:14px;font-weight:800;margin-top:14px;transition:all .3s;box-shadow:0 6px 24px rgba(192,0,26,.4);letter-spacing:.5px}
+.btn-confirm:active{transform:scale(.98)}
+.confirm-box{background:var(--card);border-radius:18px;border:2px solid var(--red);padding:24px;text-align:center;margin-top:14px;animation:popIn .4s cubic-bezier(.34,1.56,.64,1);box-shadow:0 0 40px rgba(192,0,26,.15)}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+.confirm-check{width:56px;height:56px;background:linear-gradient(135deg,var(--red),#8b0000);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;box-shadow:0 0 30px var(--red-glow)}
+.confirm-check svg{width:26px;height:26px;fill:none;stroke:white;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.confirm-box h3{font-family:'Playfair Display',serif;font-size:22px;color:var(--white);margin-bottom:4px}
+.confirm-box p{font-size:13px;color:var(--muted)}
+.confirm-rows{background:var(--glass);border-radius:11px;padding:14px 16px;margin:14px 0;text-align:left;border:1px solid var(--border)}
+.cr{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px}
+.cr:last-child{border:none}
+.cr .crl{color:var(--muted)}
+.cr .crv{font-weight:700;color:var(--white);text-align:right;max-width:60%}
+
+/* MY APPOINTMENTS */
+.apt-list{display:grid;gap:10px}
+.apt-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:16px 18px;position:relative;overflow:hidden;display:flex;align-items:flex-start;gap:14px}
+.apt-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red)}
+.apt-date-block{background:rgba(192,0,26,.1);border:1px solid rgba(192,0,26,.2);border-radius:10px;padding:10px 12px;text-align:center;min-width:52px;flex-shrink:0}
+.adb-d{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white);line-height:1}
+.adb-m{font-size:9px;color:rgba(192,0,26,.9);font-weight:700;letter-spacing:1px;margin-top:2px}
+.apt-info{flex:1;min-width:0}
+.apt-svc{font-size:14px;font-weight:700;color:var(--white);margin-bottom:5px;line-height:1.3}
+.apt-meta{display:flex;flex-wrap:wrap;gap:5px}
+.apt-chip{background:var(--glass);padding:4px 10px;border-radius:7px;font-size:10px;color:var(--muted2);border:1px solid var(--border);font-weight:500;white-space:nowrap}
+.apt-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.apt-status{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.3px;white-space:nowrap}
+.apt-status.pending{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.apt-status.confirmed{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)}
+.apt-status.done{background:rgba(99,102,241,.1);color:#818cf8;border:1px solid rgba(99,102,241,.2)}
+.btn-cancel{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 10px;border-radius:8px;font-size:11px;font-weight:600;transition:all .2s;margin-top:8px}
+.btn-cancel:active{border-color:rgba(192,0,26,.4);color:rgba(255,100,100,.8)}
+.empty-state{text-align:center;padding:48px 20px}
+.empty-state .es-icon{width:56px;height:56px;border-radius:16px;background:var(--glass);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.empty-state .es-icon svg{width:24px;height:24px;fill:var(--muted)}
+.empty-state .es-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--white);margin-bottom:6px}
+.empty-state p{font-size:13px;color:var(--muted)}
+
+/* DOCTOR APP */
+#doctorApp{background:var(--dark2)}
+.d-nav{background:var(--dark);height:var(--nav-h);display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+.d-nav-brand{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white);flex-shrink:0}
+.d-nav-brand em{color:var(--red);font-style:normal}
+.d-nav-info{display:flex;align-items:center;gap:8px;overflow:hidden}
+.d-nav-name{font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px}
+.d-nav-avatar-ph{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--red),#8b0000);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:700;flex-shrink:0}
+.d-header{background:var(--dark);border-bottom:1px solid var(--border);padding:20px 16px 0}
+.d-header-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:18px}
+.d-header-avatar{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,#1a0008,#3d0015);display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-size:22px;font-weight:900;flex-shrink:0;overflow:hidden}
+.d-header-avatar img{width:100%;height:100%;object-fit:cover}
+.d-header-info{flex:1;min-width:0}
+.d-header h2{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:var(--white);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-header p{font-size:12px;color:var(--muted);font-weight:500}
+.d-header-badge{display:inline-flex;align-items:center;gap:5px;margin-top:5px;background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2);color:#22c55e;padding:3px 10px;border-radius:30px;font-size:10px;font-weight:700}
+.d-stats-row{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border)}
+.d-stat{padding:14px 0;text-align:center;border-right:1px solid var(--border)}
+.d-stat:last-child{border:none}
+.d-stat .dsn{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--white);line-height:1}
+.d-stat.red .dsn{color:var(--red)}
+.d-stat.green .dsn{color:var(--green)}
+.d-stat.blue .dsn{color:var(--blue)}
+.d-stat .dsl{font-size:9px;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;margin-top:3px;font-weight:600}
+.d-content{padding:16px;max-width:100%;padding-bottom:40px}
+.d-tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.d-tab{padding:8px 16px;border-radius:30px;border:1.5px solid var(--border);background:transparent;font-size:12px;font-weight:700;color:var(--muted);transition:all .25s}
+.d-tab.active{background:var(--white);color:var(--dark);border-color:var(--white)}
+.d-apt-list{display:grid;gap:10px}
+.d-apt{background:var(--card);border-radius:var(--r);padding:16px;border:1px solid var(--border);display:flex;gap:12px;align-items:center}
+.d-apt-time{background:var(--dark);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;min-width:60px;flex-shrink:0}
+.dat{font-size:16px;font-weight:900;color:var(--white);font-family:'Playfair Display',serif}
+.dad{font-size:9px;opacity:.4;letter-spacing:.5px;color:var(--white);margin-top:2px}
+.d-apt-info{flex:1;min-width:0}
+.d-apt-info h4{font-size:14px;font-weight:700;color:var(--white);margin-bottom:3px}
+.d-apt-info p{font-size:11px;color:var(--muted)}
+.d-apt-svc-badge{display:inline-block;background:rgba(192,0,26,.1);border:1px solid rgba(192,0,26,.2);color:rgba(255,100,100,.8);padding:2px 8px;border-radius:7px;font-size:10px;font-weight:700;margin-top:4px}
+.d-apt-right{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.d-status{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:800;letter-spacing:.3px;white-space:nowrap}
+.d-status.new{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2)}
+.d-status.done{background:rgba(34,197,94,.1);color:#22c55e;border:1px solid rgba(34,197,94,.2)}
+.d-status.coming{background:rgba(59,130,246,.1);color:#60a5fa;border:1px solid rgba(59,130,246,.2)}
+.btn-done{background:transparent;border:1.5px solid var(--border);color:var(--muted2);padding:6px 12px;border-radius:8px;font-size:11px;font-weight:700;transition:all .25s;white-space:nowrap}
+.btn-done:active{background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.4);color:#22c55e}
+.today-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.today-date{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--white)}
+.today-day{font-size:12px;color:var(--muted);margin-top:2px}
+.d-apt-patient-info{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.d-apt-phone{display:inline-flex;align-items:center;gap:4px;background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2);color:#60a5fa;padding:2px 8px;border-radius:7px;font-size:10px;font-weight:600}
+/* WhatsApp only for admin */
+.btn-wa-apt{display:inline-flex;align-items:center;justify-content:center;gap:5px;background:rgba(34,197,94,.1);border:1.5px solid rgba(34,197,94,.28);color:#4ade80;padding:6px 12px;border-radius:8px;font-size:11px;font-weight:800;text-decoration:none;transition:all .25s;white-space:nowrap}
+.btn-wa-apt:active{background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.5);transform:scale(.98)}
+.btn-wa-apt.disabled{opacity:.45;pointer-events:none;filter:grayscale(1)}
+
+/* ADMIN */
+.chief-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(212,168,67,.12);border:1px solid rgba(212,168,67,.3);color:var(--gold);padding:3px 10px;border-radius:30px;font-size:10px;font-weight:700;margin-left:6px}
+.admin-section{margin-bottom:24px}
+.admin-header-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.btn-add-doc{display:inline-flex;align-items:center;gap:7px;padding:10px 16px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:12px;font-weight:700;transition:all .25s;box-shadow:0 4px 14px var(--red-glow);white-space:nowrap}
+.admin-doc-list{display:grid;gap:10px}
+.admin-doc-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.admin-doc-photo{width:48px;height:48px;border-radius:12px;object-fit:cover;flex-shrink:0;background:linear-gradient(135deg,#1a0008,#3d0015);display:flex;align-items:center;justify-content:center;color:white;font-family:'Playfair Display',serif;font-size:18px;font-weight:900;overflow:hidden}
+.admin-doc-photo img{width:100%;height:100%;object-fit:cover}
+.admin-doc-info{flex:1;min-width:120px}
+.admin-doc-name{font-size:13px;font-weight:700;color:var(--white);margin-bottom:2px}
+.admin-doc-spec{font-size:11px;color:var(--red);font-weight:600;margin-bottom:3px}
+.admin-doc-cred{display:inline-flex;align-items:center;gap:4px;background:rgba(192,0,26,.08);border:1px solid rgba(192,0,26,.15);padding:2px 8px;border-radius:7px;font-size:10px;color:var(--muted2)}
+.admin-doc-cred code{font-size:10px;color:rgba(255,150,100,.9);font-family:monospace}
+.admin-doc-actions{display:flex;gap:7px;flex-shrink:0}
+.btn-edit-doc{background:var(--glass);border:1px solid var(--border);color:var(--muted2);padding:7px 12px;border-radius:9px;font-size:11px;font-weight:600;transition:all .2s}
+.btn-edit-doc:active{background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3);color:#60a5fa}
+.btn-del-doc{background:var(--glass);border:1px solid var(--border);color:var(--muted);padding:7px 12px;border-radius:9px;font-size:11px;font-weight:600;transition:all .2s}
+.btn-del-doc:active{background:rgba(192,0,26,.1);border-color:rgba(192,0,26,.3);color:rgba(255,100,100,.8)}
+
+/* MODALS */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;display:flex;align-items:flex-end;justify-content:center;padding:0;backdrop-filter:blur(8px);animation:fadeIn .25s ease}
+@media(min-width:600px){.modal-overlay{align-items:center;padding:20px}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal-box{background:var(--card);border-radius:24px 24px 0 0;border:1px solid var(--border2);padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
+@media(min-width:600px){.modal-box{border-radius:24px}}
+@keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.modal-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--white);margin-bottom:3px}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.modal-actions{display:flex;gap:8px;margin-top:16px}
+.btn-modal-cancel{flex:1;padding:12px;background:var(--glass);border:1px solid var(--border);color:var(--muted2);border-radius:11px;font-size:13px;font-weight:600}
+.btn-modal-save{flex:2;padding:12px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:13px;font-weight:700;box-shadow:0 4px 14px var(--red-glow)}
+.confirm-dialog{background:var(--card);border-radius:24px 24px 0 0;border:1px solid rgba(192,0,26,.3);padding:24px;width:100%;max-width:380px;text-align:center;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)}
+@media(min-width:600px){.confirm-dialog{border-radius:20px}}
+.confirm-dialog-icon{width:52px;height:52px;border-radius:14px;background:rgba(192,0,26,.1);border:1px solid rgba(192,0,26,.2);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.confirm-dialog-icon svg{width:22px;height:22px;fill:var(--red)}
+.confirm-dialog h3{font-family:'Playfair Display',serif;font-size:19px;color:var(--white);margin-bottom:6px}
+.confirm-dialog p{font-size:12px;color:var(--muted);margin-bottom:16px}
+.confirm-dialog-btns{display:flex;gap:8px}
+.btn-confirm-no{flex:1;padding:11px;background:var(--glass);border:1px solid var(--border);color:var(--muted2);border-radius:11px;font-size:12px;font-weight:600}
+.btn-confirm-yes{flex:1;padding:11px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:12px;font-weight:700;box-shadow:0 4px 12px var(--red-glow)}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--card);color:var(--white);padding:12px 20px;border-radius:12px;font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:all .35s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;border:1px solid var(--border);border-left:3px solid var(--red);box-shadow:0 12px 40px rgba(0,0,0,.5);pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* RESPONSIVE */
+@media(max-width:700px){
+  .welcome-left{display:none}
+  .welcome-right{width:100%;padding:24px 16px}
+  #welcomeScreen{flex-direction:column}
+  .c-tabs{display:none !important}
+  .c-bottom-nav{display:none !important}
+  .c-content{padding:12px 12px 24px}
+  .d-content{padding:12px 12px 40px}
+  .d-nav{padding:0 12px}
+  .ba-grid{grid-template-columns:1fr 1fr}
+  .history-timeline{grid-template-columns:1fr}
+  .date-grid{grid-template-columns:repeat(7,1fr)}
+  .time-grid{grid-template-columns:repeat(3,1fr)}
+  .f-row{grid-template-columns:1fr}
+  .nav-auth-btns .nav-auth-btn-label{display:none}
+}
+@media(min-width:700px){
+  .c-content{padding:24px;padding-bottom:48px}
+  .d-content{padding:24px;padding-bottom:48px}
+  .booking-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+  .doc-grid{grid-template-columns:repeat(2,1fr)}
+  .svc-grid{grid-template-columns:repeat(2,1fr)}
+  .ba-grid{grid-template-columns:repeat(3,1fr)}
+  .hero-inner{padding:36px 40px}
+  .hero-inner h2{font-size:36px}
+  .c-nav{padding:0 24px}
+  .d-nav{padding:0 24px}
+}
+@media(min-width:1100px){
+  .doc-grid{grid-template-columns:repeat(3,1fr)}
+  .svc-grid{grid-template-columns:repeat(3,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ========== WELCOME (modal overlay version) ========== -->
+<div id="welcomeScreen" class="screen" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:24px;padding:28px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--white)">DR.<span style="color:var(--red)">AYAZHAN</span></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="lang-switcher">
+          <button class="lang-btn active" onclick="setLang('kk',this)">ҚАЗ</button>
+          <button class="lang-btn" onclick="setLang('ru',this)">РУС</button>
+        </div>
+        <button onclick="closeAuthModal()" style="width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:var(--glass);color:var(--muted2);font-size:20px;line-height:1">&times;</button>
+      </div>
+    </div>
+    <div class="auth-tabs" id="authTabsRow">
+      <button class="auth-tab active" onclick="showAuth('login',this)" data-i18n="tab_login">Кіру</button>
+      <button class="auth-tab" onclick="showAuth('register',this)" data-i18n="tab_register">Тіркелу</button>
+    </div>
+    <!-- Login -->
+    <div id="authLogin">
+      <div class="f-group"><label data-i18n="phone">Телефон</label><input type="tel" id="l-phone" placeholder="+7 777 000 00 00"></div>
+      <div class="f-group"><label data-i18n="pass_lbl">Пароль</label><input type="password" id="l-bdate" placeholder="Пароль"></div>
+      <button class="btn-auth" onclick="clientLogin()" data-i18n="btn_login">Кіру →</button>
+      <p class="auth-switch" data-i18n="no_acc">Аккаунт жоқ па? <a onclick="showAuth('register',null)" data-i18n="register_link">Тіркелу</a></p>
+    </div>
+    <!-- Register -->
+    <div id="authRegister" style="display:none">
+      <div class="f-row">
+        <div class="f-group"><label data-i18n="fname">Аты</label><input type="text" id="r-fname" placeholder="Айгерім"></div>
+        <div class="f-group"><label data-i18n="lname">Тегі</label><input type="text" id="r-lname" placeholder="Бекова"></div>
+      </div>
+      <div class="f-group"><label data-i18n="phone">Телефон</label><input type="tel" id="r-phone" placeholder="+7 777 000 00 00"></div>
+      <div class="f-group"><label data-i18n="pass_lbl">Пароль</label><input type="password" id="r-bdate" placeholder="Пароль"></div>
+      <button class="btn-auth" onclick="clientRegister()" data-i18n="btn_register">Тіркелу →</button>
+      <p class="auth-switch"><span data-i18n="have_acc">Аккаунт бар ма?</span> <a onclick="showAuth('login',null)" data-i18n="login_link">Кіру</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== STAFF LOGIN MODAL ========== -->
+<div id="staffLoginScreen" style="display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.75);backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px">
+  <div style="background:var(--card);border:1px solid var(--border2);border-radius:24px;padding:28px;width:100%;max-width:380px;animation:slideUp .3s cubic-bezier(.34,1.56,.64,1)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:var(--white)" id="staffLoginTitle">Дәрігер кіру</div>
+      <button onclick="closeStaffModal()" style="width:32px;height:32px;border:1px solid var(--border);border-radius:8px;background:var(--glass);color:var(--muted2);font-size:20px;line-height:1">&times;</button>
+    </div>
+    <!-- Doctor login -->
+    <div id="staffDoctorForm">
+      <div class="doc-credentials" id="docCredList"></div>
+      <div class="f-group"><label data-i18n="login_lbl">Логин</label><input type="text" id="d-login" placeholder="login" autocomplete="off"></div>
+      <div class="f-group"><label data-i18n="pass_lbl">Пароль</label><input type="password" id="d-pass" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="doctorLogin()">Кіру →</button>
+    </div>
+    <!-- Admin login -->
+    <div id="staffAdminForm" style="display:none">
+      <div class="doc-credentials">
+        <p>Админ кіру</p>
+        <div class="doc-cred-item" onclick="fillAdmin('admin','admin2026')">
+          <span>Админ</span>
+          <code>admin / admin2026</code>
+        </div>
+      </div>
+      <div class="f-group"><label>Логин</label><input type="text" id="a-login" placeholder="admin" autocomplete="off"></div>
+      <div class="f-group"><label>Пароль</label><input type="password" id="a-pass" placeholder="••••••••"></div>
+      <button class="btn-auth" onclick="adminLogin()">Кіру →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CLIENT APP ========== -->
+<div id="clientApp" class="screen active">
+  <div class="c-nav">
+    <div class="c-nav-left">
+      <button class="menu-btn" onclick="openClientMenu()" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/></svg>
+      </button>
+      <div class="c-page-title" id="cPageTitle">Басты бет</div>
+    </div>
+    <div class="c-nav-right" style="display:flex;align-items:center;gap:8px">
+      <!-- Language switcher always visible -->
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('kk',this)">ҚАЗ</button>
+        <button class="lang-btn" onclick="setLang('ru',this)">РУС</button>
+      </div>
+      <!-- Auth buttons when NOT logged in -->
+      <div id="navGuestBtns" class="nav-auth-btns">
+        <button class="nav-auth-btn" onclick="openAuthModal('login')"><span class="nav-auth-btn-label" data-i18n="tab_login">Кіру</span><span class="nav-auth-btn-icon" style="display:none">→</span></button>
+        <button class="nav-auth-btn primary" onclick="openAuthModal('register')"><span class="nav-auth-btn-label" data-i18n="tab_register">Тіркелу</span></button>
+      </div>
+      <!-- User info when logged in -->
+      <div id="navUserBtns" style="display:none" class="c-nav-user-info">
+        <span class="c-nav-user-text" id="cNavName"></span>
+        <div class="c-nav-avatar" id="cNavAv">?</div>
+        <button class="c-nav-logout" onclick="logout()" data-i18n="logout">Шығу</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER -->
+  <div id="drawerBackdrop" class="drawer-backdrop" onclick="closeClientMenu()"></div>
+  <aside id="clientSideMenu" class="side-menu" aria-label="Client menu">
+    <div class="side-menu-head">
+      <div class="side-menu-brand">DR.<em>AYAZHAN</em></div>
+      <button class="side-close" onclick="closeClientMenu()" aria-label="Close">&times;</button>
+    </div>
+
+    <!-- Nav links -->
+    <div class="side-section-label">Навигация</div>
+    <div class="side-menu-section">
+      <button class="side-menu-btn active" id="sm-home" data-menu-key="home" onclick="drawerNavigate('home')">
+        <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span>Басты бет</span>
+      </button>
+      <button class="side-menu-btn" id="sm-doctors" data-menu-key="doctors" onclick="drawerNavigate('doctors')">
+        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Дәрігерлер</span>
+      </button>
+      <button class="side-menu-btn" id="sm-services" data-menu-key="services" onclick="drawerNavigate('services')">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H9v-3H6v-2h3v-3h2v3h3v2h-3v3z"/></svg><span>Қызметтер</span>
+      </button>
+      <button class="side-menu-btn" id="sm-beforeafter" data-menu-key="beforeafter" onclick="drawerNavigate('beforeafter')">
+        <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 11.5l2.5 3.01L14.5 10l4.5 6H5l3.5-4.5z"/></svg><span>До и После</span>
+      </button>
+      <button class="side-menu-btn" id="sm-booking" data-menu-key="booking" onclick="drawerNavigate('booking')">
+        <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span>Жазылу</span>
+      </button>
+      <button class="side-menu-btn" id="sm-myapts" data-menu-key="myapts" onclick="drawerNavigate('myapts')">
+        <svg viewBox="0 0 24 24"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg><span>Жазылымдар</span>
+      </button>
+    </div>
+
+    <div class="side-divider"></div>
+
+    <!-- Staff access section -->
+    <div class="side-auth-section">
+      <div class="side-auth-section-title">Қызметкерлер / Сотрудники</div>
+      <div class="side-auth-grid">
+        <button class="side-auth-tile highlight" onclick="openStaffModal('doctor');closeClientMenu()">
+          <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          <span>Дәрігер</span>
+        </button>
+        <button class="side-auth-tile" onclick="openStaffModal('admin');closeClientMenu()">
+          <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></svg>
+          <span>Админ</span>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <div id="aptNotifBanner" style="display:none" class="notif-banner" onclick="cTabByName('myapts')">
+    <div class="notif-banner-dot"></div>
+    <div class="notif-banner-text">
+      <span id="aptNotifText"></span>
+      <span id="aptNotifSub"></span>
+    </div>
+    <div class="notif-banner-arrow">›</div>
+  </div>
+
+  <!-- Desktop tabs (hidden by default on mobile) -->
+  <div class="c-tabs">
+    <button class="c-tab active" onclick="cTab('home',this)"><svg class="c-tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg><span data-i18n="tab_home">Басты бет</span></button>
+    <button class="c-tab" onclick="cTab('doctors',this)"><svg class="c-tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span data-i18n="tab_doctors">Дәрігерлер</span></button>
+    <button class="c-tab" onclick="cTab('services',this)"><svg class="c-tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H9v-3H6v-2h3v-3h2v3h3v2h-3v3z"/></svg><span data-i18n="tab_services">Қызметтер</span></button>
+    <button class="c-tab" onclick="cTab('booking',this)"><svg class="c-tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg><span data-i18n="tab_book">Жазылу</span></button>
+    <button class="c-tab" onclick="cTab('myapts',this)"><svg class="c-tab-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg><span data-i18n="tab_myapts">Жазылымдарым</span></button>
+  </div>
+
+  <div class="c-content">
+    <!-- HOME -->
+    <div id="cHome" class="page active">
+      <div class="hero">
+        <div class="hero-glow"></div>
+        <div class="hero-inner">
+          <div class="hero-badge" data-i18n="hero_badge">Алматының ең жоғары рейтингті клиникасы</div>
+          <h2 id="heroGreet">Қош келдіңіз!</h2>
+          <p data-i18n="hero_sub">Бізге сеніңіз — жоғары сапа, жылы атмосфера</p>
+          <div class="hero-stats">
+            <div class="hs-item"><div class="hs-n">15<em>+</em></div><div class="hs-l" data-i18n="years_exp">Жыл тәжірибе</div></div>
+            <div class="hs-item"><div class="hs-n">10</div><div class="hs-l" data-i18n="specialists">Мамандар</div></div>
+            <div class="hs-item"><div class="hs-n">5000<em>+</em></div><div class="hs-l" data-i18n="happy_patients">Пациенттер</div></div>
+            <div class="hs-item"><div class="hs-n">4.9</div><div class="hs-l" data-i18n="rating">Рейтинг</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card card-pad" style="margin-bottom:16px">
+        <div class="sec-label" data-i18n="contact_us">Бізбен байланыс</div>
+        <div class="contact-row">
+          <button class="c-link wa" onclick="openLink('https://wa.me/77021675951')"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.123 1.528 5.855L0 24l6.335-1.502A11.956 11.956 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.652-.502-5.178-1.381l-.372-.217-3.761.894.928-3.674-.234-.389A9.954 9.954 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>WhatsApp</button>
+          <button class="c-link ig" onclick="openLink('https://www.instagram.com/dr.ayazhan_aidynbekkyzy')"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>Instagram</button>
+          <button class="c-link" onclick="toggleSection('mapSection','workTimeSection')"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span data-i18n="address">Мекен-жай</span></button>
+          <button class="c-link" onclick="toggleSection('workTimeSection','mapSection')"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg><span data-i18n="work_hours">Жұмыс уақыты</span></button>
+          <button class="c-link" onclick="openLink('tel:87021675951')"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>87021675951</button>
+        </div>
+        <div id="mapSection" style="display:none;margin-top:14px;border-radius:14px;overflow:hidden;border:1px solid var(--border)">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2906.123!2d76.9456!3d43.2389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDPCsDE0JzIwLjAiTiA3NsKwNTYnNDQuMiJF!5e0!3m2!1skk!2skz!4v1700000000000" width="100%" height="220" style="border:0;display:block" allowfullscreen loading="lazy"></iframe>
+          <div style="padding:12px 16px;background:var(--glass);border-top:1px solid var(--border);display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="var(--red)"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg><span style="font-size:13px;color:var(--white);font-weight:600">Алматы, Абай даңғылы 15, кабинет 204</span></div>
+        </div>
+        <div id="workTimeSection" style="display:none;margin-top:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><svg width="16" height="16" viewBox="0 0 24 24" fill="var(--red)"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg><span style="font-size:14px;color:var(--white);font-weight:700" data-i18n="work_hours">Жұмыс уақыты</span></div>
+          <div style="display:grid;gap:7px">
+            <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--glass);border-radius:9px;border:1px solid var(--border)"><span style="font-size:12px;color:var(--muted2);font-weight:600" data-i18n="mon_fri">Дүйсенбі – Жұма</span><span style="font-size:13px;color:var(--white);font-weight:700">09:00 – 19:00</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 12px;background:var(--glass);border-radius:9px;border:1px solid var(--border)"><span style="font-size:12px;color:var(--muted2);font-weight:600" data-i18n="sat">Сенбі</span><span style="font-size:13px;color:var(--white);font-weight:700">10:00 – 17:00</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 12px;background:rgba(192,0,26,.08);border-radius:9px;border:1px solid rgba(192,0,26,.2)"><span style="font-size:12px;color:rgba(255,100,100,.9);font-weight:600" data-i18n="sun">Жексенбі</span><span style="font-size:13px;color:var(--red);font-weight:700" data-i18n="day_off">Демалыс</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="history-block">
+        <div class="hb-header">
+          <div class="hb-icon"><svg viewBox="0 0 24 24" fill="var(--red)"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+          <div><div class="hb-title" data-i18n="about_clinic">Клиника туралы</div><div class="hb-sub">DR.AYAZHAN · 2008–қазір</div></div>
+        </div>
+        <div class="history-text" data-i18n="clinic_text">DR.AYAZHAN стоматологиялық клиникасы 2008 жылы Алматы қаласында ашылды.</div>
+        <div class="history-timeline">
+          <div class="hm-card"><div class="hm-year">2008</div><div class="hm-text" data-i18n="hist2008">Клиника ашылды. 3 дәрігер, 1 кабинет</div></div>
+          <div class="hm-card"><div class="hm-year">2013</div><div class="hm-text" data-i18n="hist2013">Кеңейту. КТ аппарат, имплантология бөлімі</div></div>
+          <div class="hm-card"><div class="hm-year">2018</div><div class="hm-text" data-i18n="hist2018">10 жылдық мерей. Алматы жылдың клиникасы</div></div>
+          <div class="hm-card"><div class="hm-year">2023</div><div class="hm-text" data-i18n="hist2023">Цифрлық стоматология, онлайн жазылу жүйесі</div></div>
+        </div>
+      </div>
+      <div class="ba-section">
+        <div class="sec-label" style="margin-bottom:12px" data-i18n="results">Жұмыс нәтижелері</div>
+        <div class="ba-tabs">
+          <button class="ba-tab active" onclick="baFilter('all',this)" data-i18n="all">Барлығы</button>
+          <button class="ba-tab" onclick="baFilter('whitening',this)" data-i18n="whitening">Ағарту</button>
+          <button class="ba-tab" onclick="baFilter('veneer',this)" data-i18n="veneer">Виниры</button>
+          <button class="ba-tab" onclick="baFilter('braces',this)" data-i18n="braces">Брекет</button>
+          <button class="ba-tab" onclick="baFilter('implant',this)" data-i18n="implant">Имплант</button>
+        </div>
+        <div class="ba-grid" id="baGrid"></div>
+      </div>
+    </div>
+    <!-- DOCTORS -->
+    <div id="cDoctors" class="page">
+      <div class="sec-label" style="margin-bottom:16px" data-i18n="our_team">Біздің мамандар командасы</div>
+      <div class="doc-grid" id="docList"></div>
+    </div>
+    <!-- SERVICES -->
+    <div id="cServices" class="page">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px;margin-bottom:20px">
+        <div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px" data-i18n="our_services">Біздің қызметтер</div>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:900;color:var(--white);margin-bottom:6px" data-i18n="svc_title">Кәсіби стоматология</div>
+        <div style="font-size:12px;color:var(--muted)" data-i18n="svc_sub">Барлық бағалар 1 процедураға арналған.</div>
+      </div>
+      <div id="svcList"></div>
+    </div>
+    <!-- BOOKING -->
+    <div id="cBooking" class="page">
+      <div class="sec-label" style="margin-bottom:16px" data-i18n="book_title">Дәрігерге жазылу</div>
+      <div class="booking-layout">
+        <div>
+          <div class="book-step" style="margin-bottom:12px">
+            <div class="book-step-head"><div class="bsh-num">1</div><div class="bsh-title" data-i18n="choose_svc">Қызмет таңдаңыз</div></div>
+            <div id="bkSvcChips"></div>
+          </div>
+          <div class="book-step" style="margin-bottom:12px">
+            <div class="book-step-head"><div class="bsh-num">2</div><div class="bsh-title" data-i18n="choose_doc">Дәрігер таңдаңыз</div></div>
+            <div id="bkDocChips"></div>
+          </div>
+        </div>
+        <div>
+          <div class="book-step" style="margin-bottom:12px">
+            <div class="book-step-head"><div class="bsh-num">3</div><div class="bsh-title" data-i18n="choose_date">Күн таңдаңыз</div></div>
+            <div class="date-grid" id="bkDateGrid"></div>
+          </div>
+          <div class="book-step">
+            <div class="book-step-head"><div class="bsh-num">4</div><div class="bsh-title" data-i18n="choose_time">Уақыт таңдаңыз</div></div>
+            <div class="time-grid" id="bkTimeGrid"></div>
+          </div>
+          <button class="btn-confirm" onclick="doBook()" data-i18n="confirm_book">Жазылуды растау →</button>
+          <div id="bkConfirm" style="display:none"></div>
+        </div>
+      </div>
+    </div>
+    <!-- MY APTS -->
+    <div id="cMyapts" class="page">
+      <div id="myAptList"></div>
+    </div>
+  </div>
+
+  <!-- Mobile bottom nav (kept for layout) -->
+  <div class="c-bottom-nav" style="display:none">
+    <div class="c-bottom-nav-inner">
+      <button class="c-bnav-btn active" id="bn-home" onclick="cTabByName('home')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span data-i18n="tab_home">Басты</span>
+      </button>
+      <button class="c-bnav-btn" id="bn-doctors" onclick="cTabByName('doctors')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        <span data-i18n="tab_doctors">Дәрігер</span>
+      </button>
+      <button class="c-bnav-btn" id="bn-services" onclick="cTabByName('services')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H9v-3H6v-2h3v-3h2v3h3v2h-3v3z"/></svg>
+        <span data-i18n="tab_services">Қызмет</span>
+      </button>
+      <button class="c-bnav-btn" id="bn-booking" onclick="cTabByName('booking')">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+        <span data-i18n="tab_book">Жазылу</span>
+      </button>
+      <button class="c-bnav-btn" id="bn-myapts" onclick="cTabByName('myapts')">
+        <div class="c-bnav-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
+          <span class="c-bnav-badge" id="bnAptBadge" style="display:none"></span>
+        </div>
+        <span data-i18n="tab_myapts">Жазылым</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== DOCTOR APP ========== -->
+<div id="doctorApp" class="screen">
+  <div class="d-nav">
+    <div class="d-nav-brand">DR.<em>AYAZHAN</em></div>
+    <div class="d-nav-info">
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('kk',this)">ҚАЗ</button>
+        <button class="lang-btn" onclick="setLang('ru',this)">РУС</button>
+      </div>
+      <div class="d-nav-avatar-ph" id="dNavAvatar">А</div>
+      <span class="d-nav-name" id="dNavName">Дәрігер</span>
+      <button class="c-nav-logout" onclick="logout()" style="margin-left:6px" data-i18n="logout">Шығу</button>
+    </div>
+  </div>
+  <div class="d-header">
+    <div class="d-header-top">
+      <div class="d-header-avatar" id="dHeaderAvatar"></div>
+      <div class="d-header-info">
+        <h2 id="dHeaderTitle">Дәрігер кабинеті</h2>
+        <p id="dHeaderSub">Стоматолог</p>
+        <div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:5px">
+          <span class="d-header-badge" data-i18n="online">Онлайн</span>
+          <span class="chief-badge" id="chiefBadge" style="display:none">★ Бас дәрігер</span>
+        </div>
+      </div>
+    </div>
+    <div class="d-stats-row" id="dStatRow"></div>
+  </div>
+  <div class="d-content">
+    <div class="today-header">
+      <div>
+        <div class="today-date" id="todayDateStr"></div>
+        <div class="today-day" id="todayDayStr"></div>
+      </div>
+    </div>
+    <div id="adminTabsRow" style="display:none;margin-bottom:14px">
+      <div class="d-tabs" style="margin-bottom:0">
+        <button class="d-tab active" onclick="dAppMode('apts',this)" data-i18n="apts_tab">Жазылымдар</button>
+        <button class="d-tab" onclick="dAppMode('admin',this)" data-i18n="manage_docs">Дәрігерлерді басқару</button>
+      </div>
+    </div>
+    <div id="docAptsView">
+      <div class="d-tabs" id="dFilterTabs">
+        <button class="d-tab active" onclick="dFilter('all',this)" data-filter="all" data-i18n="all">Барлығы</button>
+        <button class="d-tab" onclick="dFilter('today',this)" data-filter="today" data-i18n="today">Бүгін</button>
+        <button class="d-tab" onclick="dFilter('upcoming',this)" data-filter="upcoming" data-i18n="upcoming">Алдағы</button>
+        <button class="d-tab" onclick="dFilter('done',this)" data-filter="done" data-i18n="completed">Аяқталды</button>
+      </div>
+      <div class="d-apt-list" id="dAptList"></div>
+    </div>
+    <div id="docAdminView" style="display:none">
+      <div class="admin-section">
+        <div class="admin-header-row">
+          <div>
+            <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--white);margin-bottom:3px" data-i18n="doc_management">Дәрігерлерді басқару</div>
+            <div style="font-size:12px;color:var(--muted)" data-i18n="doc_manage_sub">Дәрігерлерді қосу, өзгерту, жою</div>
+          </div>
+          <button class="btn-add-doc" onclick="openAddDoc()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <span data-i18n="add_doc">Дәрігер қосу</span>
+          </button>
+        </div>
+        <div class="admin-doc-list" id="adminDocList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Add/Edit Doctor -->
+<div id="docModal" style="display:none" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-title" id="modalTitle">Дәрігер қосу</div>
+    <div class="modal-sub" data-i18n="fill_fields">Барлық өрістерді толтырыңыз</div>
+    <div class="f-row">
+      <div class="f-group"><label data-i18n="fname">Аты</label><input type="text" id="m-fname" placeholder="Асқар"></div>
+      <div class="f-group"><label data-i18n="lname">Тегі</label><input type="text" id="m-lname" placeholder="Жүсіпов"></div>
+    </div>
+    <div class="f-group"><label data-i18n="specialty">Мамандық</label><input type="text" id="m-spec" placeholder="Терапевт стоматолог"></div>
+    <div class="f-group"><label data-i18n="tag_lbl">Тег</label><input type="text" id="m-tag" placeholder="Терапевт"></div>
+    <div class="f-group"><label data-i18n="about_doc">Қысқаша сипаттама</label><input type="text" id="m-about" placeholder="Кариес маманы"></div>
+    <div class="f-row">
+      <div class="f-group"><label data-i18n="experience">Тәжірибе (жыл)</label><input type="number" id="m-exp" placeholder="5" min="1" max="50"></div>
+      <div class="f-group"><label data-i18n="patients_count">Пациенттер</label><input type="number" id="m-patients" placeholder="100" min="0"></div>
+    </div>
+    <div class="f-group"><label data-i18n="photo_url">Фото URL</label><input type="text" id="m-photo" placeholder="https://..."></div>
+    <div style="background:rgba(192,0,26,.06);border:1px solid rgba(192,0,26,.2);border-radius:12px;padding:14px;margin-bottom:4px">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;font-weight:700;margin-bottom:10px" data-i18n="login_creds">Кіру деректері</div>
+      <div class="f-group" style="margin-bottom:10px"><label data-i18n="login_lbl">Логин</label><input type="text" id="m-login" placeholder="askar" autocomplete="off"></div>
+      <div class="f-group" style="margin-bottom:0"><label data-i18n="pass_lbl">Пароль</label><input type="text" id="m-pass" placeholder="askar1234" autocomplete="off"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeModal()" data-i18n="cancel">Бас тарту</button>
+      <button class="btn-modal-save" onclick="saveDoc()" data-i18n="save">Сақтау →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Confirm Delete -->
+<div id="deleteModal" style="display:none" class="modal-overlay" onclick="if(event.target===this)closeDeleteModal()">
+  <div class="confirm-dialog">
+    <div class="confirm-dialog-icon"><svg viewBox="0 0 24 24" fill="var(--red)"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
+    <h3 data-i18n="confirm_del">Дәрігерді жою?</h3>
+    <p id="deleteDocName" style="color:var(--muted2);font-weight:600;margin-bottom:0"></p>
+    <p data-i18n="del_warning">Бұл әрекетті кері қайтару мүмкін емес</p>
+    <div class="confirm-dialog-btns">
+      <button class="btn-confirm-no" onclick="closeDeleteModal()" data-i18n="cancel">Бас тарту</button>
+      <button class="btn-confirm-yes" id="confirmDelBtn" data-i18n="delete_btn">Жою</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+// ==================== I18N ====================
+const LANG={
+  kk:{
+    logout:'Шығу',cancel:'Бас тарту',save:'Сақтау →',all:'Барлығы',today:'Бүгін',
+    upcoming:'Алдағы',completed:'Аяқталды',online:'Онлайн',rating:'Рейтинг',
+    years_exp:'Жыл тәжірибе',specialists:'Маман дәрігер',happy_patients:'Бақытты пациент',
+    tab_login:'Кіру',tab_register:'Тіркелу',tab_doctor:'Дәрігер',stom:'Стоматология',
+    phone:'Телефон',btn_login:'Кіру →',btn_register:'Тіркелу →',fname:'Аты',lname:'Тегі',
+    no_acc:'Аккаунт жоқ па? ',register_link:'Тіркелу',have_acc:'Аккаунт бар ма?',login_link:'Кіру',
+    login_lbl:'Логин',pass_lbl:'Пароль',demo_accounts:'Тест аккаунттары',
+    tab_home:'Басты',tab_doctors:'Дәрігер',tab_services:'Қызмет',tab_book:'Жазылу',tab_myapts:'Жазылым',
+    hero_badge:'Алматының ең жоғары рейтингті клиникасы',
+    hero_greeting:'Сәлем, ',hero_sub:'Бізге сеніңіз — жоғары сапа, жылы атмосфера',
+    contact_us:'Бізбен байланыс',address:'Мекен-жай',work_hours:'Жұмыс уақыты',
+    mon_fri:'Дүйсенбі – Жұма',sat:'Сенбі',sun:'Жексенбі',day_off:'Демалыс',
+    about_clinic:'Клиника туралы',
+    clinic_text:'DR.AYAZHAN стоматологиялық клиникасы 2008 жылы Алматы қаласында ашылды.',
+    hist2008:'Клиника ашылды. 3 дәрігер, 1 кабинет',
+    hist2013:'Кеңейту. КТ аппарат, имплантология бөлімі',
+    hist2018:'10 жылдық мерей. Алматы жылдың клиникасы',
+    hist2023:'Цифрлық стоматология, онлайн жазылу жүйесі',
+    results:'Жұмыс нәтижелері — Бұрын / Кейін',
+    whitening:'Ағарту',veneer:'Виниры',braces:'Брекет',implant:'Имплант',
+    our_team:'Біздің мамандар командасы',our_services:'Біздің қызметтер',
+    svc_title:'Кәсіби стоматология',svc_sub:'Барлық бағалар 1 процедураға арналған.',
+    book_title:'Дәрігерге жазылу',choose_svc:'Қызмет таңдаңыз',choose_doc:'Дәрігер таңдаңыз',
+    choose_date:'Күн таңдаңыз',choose_time:'Уақыт таңдаңыз',confirm_book:'Жазылуды растау →',
+    book_confirmed:'Жазылым расталды!',book_confirmed_sub:'Қабылдау ақпараты сақталды',
+    svc_lbl:'Қызмет',doctor_lbl:'Дәрігер',date_lbl:'Күн',time_lbl:'Уақыт',room_lbl:'Кабинет',
+    my_apts:'Менің жазылымдарым',no_apts:'Жазылым жоқ',no_apts_sub:'Дәрігерге жазылу үшін "Жазылу" бөліміне өтіңіз',
+    status_confirmed:'Расталды',status_done:'Аяқталды',status_cancelled:'Жойылды',cancel_apt:'Бас тарту',
+    apts_tab:'Жазылымдар',manage_docs:'Дәрігерлерді басқару',
+    doc_management:'Дәрігерлерді басқару',doc_manage_sub:'Дәрігерлерді қосу, өзгерту, жою',
+    add_doc:'Дәрігер қосу',no_apts_doc:'Жазылым жоқ',no_apts_doc_sub:'Таңдалған сүзгіге сәйкес жазылым табылмады',
+    mark_done:'Орындалды',status_new:'Жаңа',today_stat:'Бүгін',done_stat:'Аяқталды',left_stat:'Қалды',total_stat:'Барлығы',
+    modal_add_title:'Дәрігер қосу',modal_edit_title:'Дәрігерді өзгерту',fill_fields:'Барлық өрістерді толтырыңыз',
+    specialty:'Мамандық',tag_lbl:'Тег (қысқаша)',about_doc:'Қысқаша сипаттама',
+    experience:'Тәжірибе (жыл)',patients_count:'Пациенттер саны',photo_url:'Фото URL',
+    login_creds:'Кіру деректері',confirm_del:'Дәрігерді жою?',del_warning:'Бұл әрекетті кері қайтару мүмкін емес',delete_btn:'Жою',
+    t_fill_all:'Барлық өрістерді толтырыңыз',t_phone_exists:'Бұл телефон тіркелген.',
+    t_reg_ok:'Тіркелу сәтті болды!',t_acc_not_found:'Аккаунт табылмады. Алдымен тіркеліңіз.',
+    t_wrong_pass:'Логин немесе пароль қате',t_logout:'Шығу орындалды',
+    t_choose_svc:'Қызмет таңдаңыз',t_choose_doc:'Дәрігер таңдаңыз',
+    t_choose_date:'Күн таңдаңыз',t_choose_time:'Уақыт таңдаңыз',t_book_ok:'Жазылым сәтті тіркелді!',
+    t_apt_cancelled:'Жазылым жойылды',t_marked_done:'Жазылым орындалды деп белгіленді',
+    t_doc_added:'Дәрігер сәтті қосылды!',t_doc_updated:'Дәрігер мәліметтері жаңартылды!',
+    t_doc_deleted:'Дәрігер жойылды',t_login_exists:'Бұл логин бос емес',
+    t_cannot_del_self:'Өзіңізді жоя алмайсыз',t_access_denied:'Рұқсат жоқ',
+    t_login_first:'Алдымен кіріңіз немесе тіркеліңіз',
+    days:['Жс','Дс','Сс','Ср','Бс','Жм','Сб'],
+    months_full:['Қаңтар','Ақпан','Наурыз','Сәуір','Мамыр','Маусым','Шілде','Тамыз','Қыркүйек','Қазан','Қараша','Желтоқсан'],
+    months_short:['ҚАЗ','АҚП','НАУ','СӘУ','МАМ','МАУ','ШІЛ','ТАМ','ҚЫР','ОКТ','ҚАР','ЖЕЛ'],
+    day_full_names:['Жексенбі','Дүйсенбі','Сейсенбі','Сәрсенбі','Бейсенбі','Жұма','Сенбі'],
+    svc_prof_desc:'Кәсіби стоматологиялық қызмет',
+    free_price:'Тегін',busy_slot:'Бос емес',year_lbl:'Жыл',patient_lbl:'Пациент',
+    edit_btn:'Өзгерту',del_btn:'Жою',book_new:'Жаңа жазылым →',
+  },
+  ru:{
+    logout:'Выйти',cancel:'Отмена',save:'Сохранить →',all:'Все',today:'Сегодня',
+    upcoming:'Предстоящие',completed:'Завершено',online:'Онлайн',rating:'Рейтинг',
+    years_exp:'Лет опыта',specialists:'Специалистов',happy_patients:'Довольных пациентов',
+    tab_login:'Войти',tab_register:'Регистрация',tab_doctor:'Врач',stom:'Стоматология',
+    phone:'Телефон',btn_login:'Войти →',btn_register:'Зарегистрироваться →',fname:'Имя',lname:'Фамилия',
+    no_acc:'Нет аккаунта? ',register_link:'Зарегистрироваться',have_acc:'Есть аккаунт?',login_link:'Войти',
+    login_lbl:'Логин',pass_lbl:'Пароль',demo_accounts:'Тестовые аккаунты',
+    tab_home:'Главная',tab_doctors:'Врачи',tab_services:'Услуги',tab_book:'Запись',tab_myapts:'Записи',
+    hero_badge:'Клиника с наивысшим рейтингом в Алматы',
+    hero_greeting:'Привет, ',hero_sub:'Доверьтесь нам — высокое качество, тёплая атмосфера',
+    contact_us:'Связаться с нами',address:'Адрес',work_hours:'Часы работы',
+    mon_fri:'Понедельник – Пятница',sat:'Суббота',sun:'Воскресенье',day_off:'Выходной',
+    about_clinic:'О клинике',
+    clinic_text:'Стоматологическая клиника DR.AYAZHAN открылась в 2008 году в Алматы.',
+    hist2008:'Открытие клиники. 3 врача, 1 кабинет',
+    hist2013:'Расширение. КТ-аппарат, отдел имплантологии',
+    hist2018:'10-летний юбилей. Клиника года Алматы',
+    hist2023:'Цифровая стоматология, система онлайн-записи',
+    results:'Результаты работы — До и после',
+    whitening:'Отбеливание',veneer:'Виниры',braces:'Брекеты',implant:'Импланты',
+    our_team:'Наша команда специалистов',our_services:'Наши услуги',
+    svc_title:'Профессиональная стоматология',svc_sub:'Все цены указаны за 1 процедуру.',
+    book_title:'Запись к врачу',choose_svc:'Выберите услугу',choose_doc:'Выберите врача',
+    choose_date:'Выберите дату',choose_time:'Выберите время',confirm_book:'Подтвердить запись →',
+    book_confirmed:'Запись подтверждена!',book_confirmed_sub:'Информация о приеме сохранена',
+    svc_lbl:'Услуга',doctor_lbl:'Врач',date_lbl:'Дата',time_lbl:'Время',room_lbl:'Кабинет',
+    my_apts:'Мои записи',no_apts:'Записей нет',no_apts_sub:'Перейдите в раздел "Запись" чтобы записаться к врачу',
+    status_confirmed:'Подтверждено',status_done:'Завершено',status_cancelled:'Отменено',cancel_apt:'Отменить',
+    apts_tab:'Записи',manage_docs:'Управление врачами',
+    doc_management:'Управление врачами',doc_manage_sub:'Добавление, редактирование и удаление врачей',
+    add_doc:'Добавить врача',no_apts_doc:'Записей нет',no_apts_doc_sub:'Записей по выбранному фильтру не найдено',
+    mark_done:'Выполнено',status_new:'Новый',today_stat:'Сегодня',done_stat:'Выполнено',left_stat:'Осталось',total_stat:'Всего',
+    modal_add_title:'Добавить врача',modal_edit_title:'Редактировать врача',fill_fields:'Заполните все поля',
+    specialty:'Специальность',tag_lbl:'Тег (кратко)',about_doc:'Краткое описание',
+    experience:'Опыт (лет)',patients_count:'Количество пациентов',photo_url:'Фото URL',
+    login_creds:'Данные для входа',confirm_del:'Удалить врача?',del_warning:'Это действие нельзя отменить',delete_btn:'Удалить',
+    t_fill_all:'Заполните все поля',t_phone_exists:'Этот телефон уже зарегистрирован.',
+    t_reg_ok:'Регистрация прошла успешно!',t_acc_not_found:'Аккаунт не найден. Сначала зарегистрируйтесь.',
+    t_wrong_pass:'Неверный логин или пароль',t_logout:'Выход выполнен',
+    t_choose_svc:'Выберите услугу',t_choose_doc:'Выберите врача',
+    t_choose_date:'Выберите дату',t_choose_time:'Выберите время',t_book_ok:'Запись успешно создана!',
+    t_apt_cancelled:'Запись отменена',t_marked_done:'Запись отмечена как выполненная',
+    t_doc_added:'Врач успешно добавлен!',t_doc_updated:'Данные врача обновлены!',
+    t_doc_deleted:'Врач удалён',t_login_exists:'Этот логин уже занят',
+    t_cannot_del_self:'Нельзя удалить себя',t_access_denied:'Нет доступа',
+    t_login_first:'Сначала войдите или зарегистрируйтесь',
+    days:['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+    months_full:['Январь','Февраль','Март','Апрель','Май','Июнь','Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+    months_short:['ЯНВ','ФЕВ','МАР','АПР','МАЙ','ИЮН','ИЮЛ','АВГ','СЕН','ОКТ','НОЯ','ДЕК'],
+    day_full_names:['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],
+    svc_prof_desc:'Профессиональная стоматологическая услуга',
+    free_price:'Бесплатно',busy_slot:'Занято',year_lbl:'Лет',patient_lbl:'Пациентов',
+    edit_btn:'Редактировать',del_btn:'Удалить',book_new:'Новая запись →',
+  }
+};
+let currentLang='kk';
+function t(key){return LANG[currentLang][key]||LANG['kk'][key]||key;}
+
+function setLang(lang,btn){
+  currentLang=lang;
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active',b.textContent.trim()===(lang==='kk'?'ҚАЗ':'РУС'));
+  });
+  applyI18n();
+  if(document.getElementById('clientApp').classList.contains('active')){
+    renderDoctors();renderServices();renderBkForm();renderBAGrid(currentBAFilter||'all');renderMyApts();
+    const greet=document.getElementById('heroGreet');
+    if(greet) greet.textContent=currentUser?(t('hero_greeting')+currentUser.fname+'!'):(currentLang==='ru'?'Добро пожаловать!':'Қош келдіңіз!');
+    updateAptNotif();
+    updateNavAuthLabels();
+  }
+  if(document.getElementById('doctorApp').classList.contains('active')){
+    renderDStats();
+    const activeTab=document.querySelector('#dFilterTabs .d-tab.active');
+    renderDApts(activeTab?activeTab.dataset.filter||'all':'all');
+    if(isAdmin())renderAdminDocs();
+    updateTodayDate();
+  }
+}
+
+function applyI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.dataset.i18n;
+    if(LANG[currentLang][key]!==undefined)el.innerHTML=LANG[currentLang][key];
+  });
+}
+
+// ==================== DATA ====================
+let DB={
+  clients:JSON.parse(localStorage.getItem('da_clients')||'[]'),
+  appointments:JSON.parse(localStorage.getItem('da_apts')||'[]'),
+  doctors:JSON.parse(localStorage.getItem('da_doctors')||'null'),
+};
+
+const DEFAULT_DOCTORS=[
+  {id:'ayazhan',login:'ayazhan',pass:'ayazhan2008',name:'Аяжан Нұрланқызы',spec:'Бас дәрігер / Ортодонт',exp:15,patients:520,rating:5.0,tag:'Бас дәрігер',tagClass:'head',about:'Жоғары санатты ортопед, Германия мен Корея тағылымдамасы',photo:'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&h=200&fit=crop&crop=face',isChief:true},
+  {id:'askar',login:'askar',pass:'askar1234',name:'Асқар Жүсіпов',spec:'Терапевт стоматолог',exp:10,patients:340,rating:4.8,tag:'Терапевт',tagClass:'',about:'Кариес, пломба, каналды емдеу маманы',photo:'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=200&h=200&fit=crop&crop=face'},
+  {id:'dina',login:'dina',pass:'dina2015',name:'Дина Серікова',spec:'Балалар стоматологы',exp:8,patients:280,rating:4.9,tag:'Балалар дәрігері',tagClass:'head',about:'0-17 жас балаларды емдеу, алғаш тіс, фтор',photo:'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=200&h=200&fit=crop&crop=face'},
+  {id:'marat',login:'marat',pass:'marat9090',name:'Марат Алиев',spec:'Хирург-стоматолог',exp:12,patients:230,rating:4.7,tag:'Хирург',tagClass:'',about:'Тіс жұлу, имплант орнату, сүйек пластикасы',photo:'https://images.unsplash.com/photo-1622253692010-333f2da6031d?w=200&h=200&fit=crop&crop=face'},
+  {id:'saule',login:'saule',pass:'saule7777',name:'Сауле Омарова',spec:'Ортодонт',exp:9,patients:200,rating:4.8,tag:'Ортодонт',tagClass:'',about:'Брекет жүйесі, элайнер, тіс түзету',photo:'https://images.unsplash.com/photo-1527613426441-4da17471b66d?w=200&h=200&fit=crop&crop=face'},
+  {id:'berik',login:'berik',pass:'berik5555',name:'Берік Тасболатов',spec:'Пародонтолог',exp:7,patients:160,rating:4.7,tag:'Пародонт',tagClass:'',about:'Қызылет ауруы, пародонтит емдеу',photo:'https://images.unsplash.com/photo-1582750433449-648ed127bb54?w=200&h=200&fit=crop&crop=face'},
+  {id:'aigulnur',login:'aigulnur',pass:'aigul2020',name:'Айгүлнұр Нұрова',spec:'Эстетикалық стоматология',exp:6,patients:190,rating:4.9,tag:'Эстетика',tagClass:'',about:'Тіс ағарту, виниры, люминирлер',photo:'https://images.unsplash.com/photo-1651008376811-b90baee60c1f?w=200&h=200&fit=crop&crop=face'},
+  {id:'timur',login:'timur',pass:'timur3030',name:'Тимур Есентаев',spec:'Эндодонтист',exp:11,patients:150,rating:4.8,tag:'Эндодонт',tagClass:'',about:'Тамыр каналдарын емдеу маманы',photo:'https://images.unsplash.com/photo-1537368910025-700350fe46c7?w=200&h=200&fit=crop&crop=face'},
+  {id:'zhanar',login:'zhanar',pass:'zhanar0101',name:'Жанар Қасымова',spec:'Рентгенолог',exp:5,patients:400,rating:4.6,tag:'Диагностика',tagClass:'',about:'КТ, рентген, цифрлық диагностика',photo:'https://images.unsplash.com/photo-1594824476967-48c8b964273f?w=200&h=200&fit=crop&crop=face&q=50&sat=-50'},
+  {id:'serik',login:'serik',pass:'serik6666',name:'Серік Бекжанов',spec:'Протезист',exp:14,patients:260,rating:4.9,tag:'Протезист',tagClass:'',about:'Тіс протезі, коронка, жасанды тіс жасау',photo:'https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?w=200&h=200&fit=crop&crop=face'},
+];
+
+if(!DB.doctors){DB.doctors=JSON.parse(JSON.stringify(DEFAULT_DOCTORS));saveDB();}
+
+function getDoctors(){return DB.doctors;}
+function isAdmin(){return currentAdmin===true;}
+
+const SERVICES=[
+  {cat:'Диагностика',catRu:'Диагностика',icon:'🔬',items:[
+    {name:'Консультация',nameRu:'Консультация',dur:'30 мин',durRu:'30 мин',price:'Тегін'},
+    {name:'Рентген (1 тіс)',nameRu:'Рентген (1 зуб)',dur:'15 мин',durRu:'15 мин',price:'2 000 ₸'},
+    {name:'КТ сканер',nameRu:'КТ сканер',dur:'20 мин',durRu:'20 мин',price:'15 000 ₸'},
+  ]},
+  {cat:'Емдеу',catRu:'Лечение',icon:'',items:[
+    {name:'Кариес емдеу',nameRu:'Лечение кариеса',dur:'60 мин',durRu:'60 мин',price:'18 000 ₸'},
+    {name:'Каналды емдеу',nameRu:'Лечение каналов',dur:'90 мин',durRu:'90 мин',price:'35 000 ₸'},
+    {name:'Тіс тастарын алу',nameRu:'Удаление зубного камня',dur:'45 мин',durRu:'45 мин',price:'12 000 ₸'},
+  ]},
+  {cat:'Эстетика',catRu:'Эстетика',icon:'',items:[
+    {name:'Тіс ағарту',nameRu:'Отбеливание зубов',dur:'90 мин',durRu:'90 мин',price:'45 000 ₸'},
+    {name:'Винир (1 тіс)',nameRu:'Винир (1 зуб)',dur:'120 мин',durRu:'120 мин',price:'65 000 ₸'},
+    {name:'Air Flow тазалау',nameRu:'Чистка Air Flow',dur:'60 мин',durRu:'60 мин',price:'15 000 ₸'},
+  ]},
+  {cat:'Хирургия',catRu:'Хирургия',icon:'',items:[
+    {name:'Тіс жұлу',nameRu:'Удаление зуба',dur:'30 мин',durRu:'30 мин',price:'10 000 ₸'},
+    {name:'Имплант орнату',nameRu:'Установка импланта',dur:'60 мин',durRu:'60 мин',price:'150 000 ₸'},
+  ]},
+  {cat:'Ортодонтия',catRu:'Ортодонтия',icon:'',items:[
+    {name:'Брекет жүйесі',nameRu:'Брекет-система',dur:'90 мин',durRu:'90 мин',price:'200 000 ₸'},
+    {name:'Элайнер',nameRu:'Элайнеры',dur:'60 мин',durRu:'60 мин',price:'280 000 ₸'},
+  ]},
+];
+
+const BA_DATA=[
+  {type:'whitening',title:{kk:'Тіс ағарту',ru:'Отбеливание'},desc:{kk:'3 тон жарқырады',ru:'Светлее на 3 тона'},before:'https://th.bing.com/th/id/R.92e6240b6b1c1fc989867952b4f97d73?rik=8xFPK0VckxxhVA&riu=http%3a%2f%2fkandeleria.ru%2fwp-content%2fuploads%2f2016%2f11%2fotbelivnie-zubov-otzyvy-s-foto-do-i-posle-05.jpg&ehk=QCR5bhT585icj8tqBvlJDb73ayuhQ7jlNHYHleV1OL0%3d&risl=&pid=ImgRaw&r=0',after:'https://tse3.mm.bing.net/th/id/OIP.sIGXvQcDA4z3AS41xxokmwHaHa?rs=1&pid=ImgDetMain&o=7&rm=3'},
+  {type:'veneer',title:{kk:'Виниры',ru:'Виниры'},desc:{kk:'Керамикалық виниры',ru:'Керамические виниры'},before:'https://i.pinimg.com/736x/b4/6b/b8/b46bb80bf1f56a7fb0aa63bc4fd8547d.jpg',after:'https://th.bing.com/th/id/R.f02080da4301254631a01613c9b368ce?rik=FUIdIxSaLRsi2g&riu=http%3a%2f%2faveona-kamensk.ru%2fd%2f2_9.jpg&ehk=WVVc%2b68if7bzhI%2bTkJ2kJLn%2bk74A4CmGEG3car377FA%3d&risl=&pid=ImgRaw&r=0'},
+  {type:'braces',title:{kk:'Брекет',ru:'Брекеты'},desc:{kk:'12 ай нәтижесі',ru:'Результат за 12 месяцев'},before:'https://i.pinimg.com/736x/3d/39/25/3d392559c6dae8a2c8d8982a5b33e8b3.jpg',after:'https://i2024.otzovik.com/2024/02/16/15801795/img/1505692_7901085.jpeg'},
+  {type:'implant',title:{kk:'Имплант',ru:'Имплант'},desc:{kk:'Титан импланты',ru:'Титановый имплант'},before:'https://dentalcentr.com.ua/ru/media/2021-news-impl/original/2022_10_07_07.jpg',after:'https://tse2.mm.bing.net/th/id/OIP.GAy-XvlHyery1BWnlkE9PAHaF7?rs=1&pid=ImgDetMain&o=7&rm=3'},
+  {type:'whitening',title:{kk:'Ағарту 2',ru:'Отбеливание 2'},desc:{kk:'LED технологиясы',ru:'LED технология'},before:'https://tse1.explicit.bing.net/th/id/OIP.p6U9VuiWJlTdPC2zaSQ8gAHaGg?rs=1&pid=ImgDetMain&o=7&rm=3',after:'https://cdn-irec.r-99.com/sites/default/files/imagecache/copyright1/user-images/761251/7DRuxhccvWsBhVBWb1Ydug.jpeg'},
+  {type:'veneer',title:{kk:'Виниры 2',ru:'Виниры 2'},desc:{kk:'Люминирлер',ru:'Люминиры'},before:'https://mysekret.ru/wp-content/uploads/2019/01/mycollages-3-e1548076135428-685x800.jpg',after:'https://zubzubov.ru/wp-content/uploads/2013/01/14.jpg'},
+];
+
+let currentUser=null,currentDoctor=null,currentAdmin=false;
+let bk={svc:null,doc:null,date:null,time:null};
+let currentBAFilter='all';
+let editingDocId=null;
+let pendingClientTarget='home';
+
+function saveDB(){
+  localStorage.setItem('da_clients',JSON.stringify(DB.clients));
+  localStorage.setItem('da_apts',JSON.stringify(DB.appointments));
+  localStorage.setItem('da_doctors',JSON.stringify(DB.doctors));
+}
+
+function seedDemoApts(){
+  if(DB.appointments.length===0){
+    const today=new Date();
+    const fmtD=d=>d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
+    const yd=new Date(today);yd.setDate(today.getDate()-1);
+    const td=fmtD(today);const tyd=fmtD(yd);
+    DB.appointments=[
+      {id:1,client:'Айгерім Бекова',phone:'+7 701 111 22 33',clientId:'demo',docId:'askar',service:'Air Flow тазалау',date:td,time:'10:00',status:'confirmed'},
+      {id:2,client:'Марат Сейітов',phone:'+7 702 333 44 55',clientId:'demo2',docId:'askar',service:'Кариес емдеу',date:td,time:'12:30',status:'confirmed'},
+      {id:3,client:'Зарина Қасым',phone:'+7 707 555 66 77',clientId:'demo3',docId:'askar',service:'Консультация',date:td,time:'15:00',status:'done'},
+      {id:4,client:'Болат Нұр',phone:'+7 708 111 22 33',clientId:'demo4',docId:'ayazhan',service:'Тіс ағарту',date:td,time:'09:00',status:'confirmed'},
+      {id:5,client:'Жанна Ли',phone:'+7 701 999 88 77',clientId:'demo5',docId:'ayazhan',service:'Рентген (1 тіс)',date:td,time:'11:00',status:'done'},
+      {id:6,client:'Санжар Омар',phone:'+7 702 777 66 55',clientId:'demo6',docId:'ayazhan',service:'Винир (1 тіс)',date:tyd,time:'14:00',status:'done'},
+      {id:7,client:'Алия Нұр',phone:'+7 705 333 22 11',clientId:'demo7',docId:'dina',service:'Консультация',date:td,time:'10:30',status:'confirmed'},
+      {id:8,client:'Тимур Аль',phone:'+7 707 444 55 66',clientId:'demo8',docId:'marat',service:'Тіс жұлу',date:td,time:'16:00',status:'confirmed'},
+    ];
+    saveDB();
+  }
+}
+
+function normalizePhone(p){
+  if(!p)return'';
+  let n=p.replace(/[\s\-\(\)\+]/g,'');
+  if(n.startsWith('8'))n='7'+n.slice(1);
+  return n;
+}
+
+// ==================== NOTIFICATION BANNER ====================
+function updateAptNotif(){
+  if(!currentUser)return;
+  const mine=DB.appointments.filter(a=>a.clientId===currentUser.id&&a.status==='confirmed');
+  const banner=document.getElementById('aptNotifBanner');
+  const badge=document.getElementById('bnAptBadge');
+  if(mine.length>0){
+    const next=mine.sort((a,b)=>a.date.localeCompare(b.date))[0];
+    const doc=getDoctors().find(d=>d.id===next.docId)||{name:''};
+    const svcObj=SERVICES.flatMap(c=>c.items).find(s=>s.name===next.service);
+    const svcDisplay=currentLang==='ru'&&svcObj?svcObj.nameRu:next.service;
+    document.getElementById('aptNotifText').textContent=
+      currentLang==='ru'?`У вас ${mine.length} запис${mine.length===1?'ь':'ей'} · ${next.date} ${next.time}`
+                        :`Сізде ${mine.length} жазылым · ${next.date} ${next.time}`;
+    document.getElementById('aptNotifSub').textContent=`${doc.name} — ${svcDisplay}`;
+    banner.style.display='flex';
+    if(badge)badge.style.display='block';
+  } else {
+    banner.style.display='none';
+    if(badge)badge.style.display='none';
+  }
+}
+
+// ==================== AUTH MODALS ====================
+function openAuthModal(tab){
+  const ws=document.getElementById('welcomeScreen');
+  ws.style.display='flex';
+  showAuth(tab||'login',null);
+  applyI18n();
+}
+function closeAuthModal(){
+  document.getElementById('welcomeScreen').style.display='none';
+}
+
+function openStaffModal(type){
+  const el=document.getElementById('staffLoginScreen');
+  el.style.display='flex';
+  document.getElementById('staffDoctorForm').style.display=type==='doctor'?'block':'none';
+  document.getElementById('staffAdminForm').style.display=type==='admin'?'block':'none';
+  document.getElementById('staffLoginTitle').textContent=type==='doctor'?
+    (currentLang==='ru'?'Вход для врача':'Дәрігер кіру'):
+    (currentLang==='ru'?'Вход для администратора':'Админ кіру');
+  if(type==='doctor')buildDocCredentials();
+}
+function closeStaffModal(){
+  document.getElementById('staffLoginScreen').style.display='none';
+}
+
+function showAuth(tab,btn){
+  ['Login','Register'].forEach(x=>document.getElementById('auth'+x).style.display='none');
+  if(document.getElementById('auth'+tab.charAt(0).toUpperCase()+tab.slice(1)))
+    document.getElementById('auth'+tab.charAt(0).toUpperCase()+tab.slice(1)).style.display='block';
+  if(btn){document.querySelectorAll('.auth-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
+  else{document.querySelectorAll('.auth-tab').forEach((b,i)=>b.classList.toggle('active',['login','register'][i]===tab));}
+}
+
+function buildDocCredentials(){
+  const docs=getDoctors();
+  const preview=docs.slice(0,4);
+  const el=document.getElementById('docCredList');
+  if(!el)return;
+  el.innerHTML=`
+    <p>${t('demo_accounts')}</p>
+    ${preview.map(d=>`
+      <div class="doc-cred-item" onclick="fillDoc('${d.login}','${d.pass}')">
+        <span>${d.name.split(' ')[0]}${d.isChief?' ★':''}</span>
+        <code>${d.login} / ${d.pass}</code>
+      </div>`).join('')}
+    ${docs.length>4?`<div style="font-size:10px;color:var(--muted);text-align:center;padding:5px 0">+${docs.length-4} ${currentLang==='kk'?'дәрігер':'врачей'}</div>`:''}
+  `;
+}
+
+function updateNavAuthLabels(){
+  const isLoggedIn=!!currentUser;
+  document.getElementById('navGuestBtns').style.display=isLoggedIn?'none':'flex';
+  document.getElementById('navUserBtns').style.display=isLoggedIn?'flex':'none';
+}
+
+// ==================== CLIENT AUTH ====================
+function clientLogin(){
+  const rawPhone=document.getElementById('l-phone').value.trim();
+  const bd=document.getElementById('l-bdate').value.trim();
+  if(!rawPhone||!bd){toast(t('t_fill_all'));return;}
+  const ph=normalizePhone(rawPhone);
+  let cl=DB.clients.find(c=>normalizePhone(c.phone)===ph&&c.bdate===bd);
+  if(!cl){toast(t('t_acc_not_found'));return;}
+  currentUser=cl;
+  closeAuthModal();
+  launchClientApp();
+}
+
+function clientRegister(){
+  const fn=document.getElementById('r-fname').value.trim();
+  const ln=document.getElementById('r-lname').value.trim();
+  const rawPhone=document.getElementById('r-phone').value.trim();
+  const bd=document.getElementById('r-bdate').value.trim();
+  if(!fn||!ln||!rawPhone||!bd){toast(t('t_fill_all'));return;}
+  const ph=normalizePhone(rawPhone);
+  if(DB.clients.find(c=>normalizePhone(c.phone)===ph)){toast(t('t_phone_exists'));return;}
+  const cl={id:Date.now(),fname:fn,lname:ln,phone:rawPhone,bdate:bd,fullName:fn+' '+ln};
+  DB.clients.push(cl);saveDB();currentUser=cl;
+  toast(t('t_reg_ok'));
+  closeAuthModal();
+  launchClientApp();
+}
+
+function fillDoc(l,p){
+  document.getElementById('d-login').value=l;
+  document.getElementById('d-pass').value=p;
+}
+function fillAdmin(l,p){
+  document.getElementById('a-login').value=l;
+  document.getElementById('a-pass').value=p;
+}
+
+function doctorLogin(){
+  const l=document.getElementById('d-login').value.trim();
+  const p=document.getElementById('d-pass').value.trim();
+  const doc=getDoctors().find(d=>d.login===l&&d.pass===p);
+  if(!doc){toast(t('t_wrong_pass'));return;}
+  currentAdmin=false;
+  currentDoctor=doc;
+  closeStaffModal();
+  launchDoctorApp();
+}
+
+function adminLogin(){
+  const l=document.getElementById('a-login').value.trim();
+  const p=document.getElementById('a-pass').value.trim();
+  if(l!=='admin'||p!=='admin2026'){toast(t('t_wrong_pass'));return;}
+  currentAdmin=true;
+  currentDoctor={id:'admin',name:'Админ панель',spec:'Дәрігерлер мен клиент жазылымдарын басқару',photo:'',isAdmin:true};
+  closeStaffModal();
+  launchDoctorApp();
+}
+
+function logout(){
+  currentUser=null;currentDoctor=null;currentAdmin=false;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('clientApp').classList.add('active');
+  updateNavAuthLabels();
+  document.getElementById('heroGreet').textContent=currentLang==='ru'?'Добро пожаловать!':'Қош келдіңіз!';
+  document.getElementById('aptNotifBanner').style.display='none';
+  renderDoctors();renderServices();renderBkForm();renderBAGrid('all');
+  cTabByName('home');
+  applyI18n();
+  toast(t('t_logout'));
+}
+
+// ==================== CLIENT APP ====================
+function launchClientApp(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('clientApp').classList.add('active');
+  document.getElementById('cNavName').textContent=currentUser.fname;
+  document.getElementById('cNavAv').textContent=currentUser.fname[0].toUpperCase();
+  document.getElementById('heroGreet').textContent=t('hero_greeting')+currentUser.fname+'!';
+  updateNavAuthLabels();
+  applyI18n();
+  renderDoctors();renderServices();renderBkForm();renderBAGrid('all');renderMyApts();updateAptNotif();
+  cTabByName(pendingClientTarget||'home');
+  pendingClientTarget='home';
+}
+
+function cTabByName(name){
+  // Guard: booking and myapts require login
+  if((name==='booking'||name==='myapts')&&!currentUser){
+    pendingClientTarget=name;
+    openAuthModal(name==='booking'?'register':'login');
+    toast(t('t_login_first'));
+    return;
+  }
+  const names=['home','doctors','services','booking','myapts'];
+  const idx=names.indexOf(name);
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const pg=document.getElementById('c'+name.charAt(0).toUpperCase()+name.slice(1));
+  if(pg)pg.classList.add('active');
+  document.querySelectorAll('.c-tab').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  document.querySelectorAll('.c-bnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('bn-'+name)?.classList.add('active');
+  setClientMenuActive(name);
+  updatePageTitle(name);
+  if(name==='myapts'){renderMyApts();updateAptNotif();}
+}
+
+function cTab(id,btn){cTabByName(id);}
+
+// Drawer
+function openClientMenu(){
+  document.getElementById('drawerBackdrop').classList.add('open');
+  document.getElementById('clientSideMenu').classList.add('open');
+}
+function closeClientMenu(){
+  document.getElementById('drawerBackdrop').classList.remove('open');
+  document.getElementById('clientSideMenu').classList.remove('open');
+}
+function drawerNavigate(name){
+  closeClientMenu();
+  if(name==='beforeafter'){
+    cTabByName('home');
+    setClientMenuActive('beforeafter');
+    setTimeout(()=>document.querySelector('.ba-section')?.scrollIntoView({behavior:'smooth',block:'start'}),80);
+    return;
+  }
+  cTabByName(name);
+}
+function setClientMenuActive(name){
+  document.querySelectorAll('.side-menu-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('sm-'+name)?.classList.add('active');
+}
+
+const PAGE_LABELS={
+  kk:{home:'Басты бет',doctors:'Дәрігерлер',services:'Қызметтер',beforeafter:'До и После',booking:'Жазылу',myapts:'Жазылымдар'},
+  ru:{home:'Главная',doctors:'Врачи',services:'Услуги',beforeafter:'До и После',booking:'Запись',myapts:'Записи'}
+};
+function updatePageTitle(name){
+  const el=document.getElementById('cPageTitle');
+  if(el)el.textContent=(PAGE_LABELS[currentLang]||PAGE_LABELS.kk)[name]||(PAGE_LABELS.kk[name]||name);
+}
+
+// BA
+function renderBAGrid(filter){
+  currentBAFilter=filter;
+  const data=filter==='all'?BA_DATA:BA_DATA.filter(b=>b.type===filter);
+  const bl=currentLang==='ru'?'ДО':'БҰРЫН';
+  const al=currentLang==='ru'?'ПОСЛЕ':'КЕЙІН';
+  document.getElementById('baGrid').innerHTML=data.map(b=>`
+    <div class="ba-card">
+      <div class="ba-pair">
+        <div class="ba-img-slot"><img src="${b.before}" alt="before" loading="lazy"><span class="ba-lbl before">${bl}</span></div>
+        <div class="ba-img-slot"><img src="${b.after}" alt="after" loading="lazy"><span class="ba-lbl after">${al}</span></div>
+      </div>
+      <div class="ba-card-info"><h5>${b.title[currentLang]||b.title.kk}</h5><p>${b.desc[currentLang]||b.desc.kk}</p></div>
+    </div>`).join('');
+}
+function baFilter(f,btn){
+  document.querySelectorAll('.ba-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  renderBAGrid(f);
+}
+
+// Doctors
+function renderDoctors(){
+  const docs=getDoctors();
+  document.getElementById('docList').innerHTML=docs.map(d=>`
+    <div class="doc-card">
+      <div class="doc-row">
+        ${d.photo?`<img src="${d.photo}" class="doc-photo" alt="${d.name}" loading="lazy">`:`<div class="doc-photo-placeholder">${d.name[0]}</div>`}
+        <div style="flex:1;min-width:0">
+          <div class="doc-name">${d.name}</div>
+          <div class="doc-spec">${d.spec}</div>
+          <div class="doc-exp">${d.about}</div>
+          <div class="doc-tags">
+            <span class="doc-tag ${d.tagClass||''}">${d.tag}</span>
+            <span class="doc-tag">⭐ ${d.rating}</span>
+          </div>
+        </div>
+      </div>
+      <div class="doc-meta">
+        <div class="dm-item"><div class="dm-val">${d.exp}</div><div class="dm-lbl">${t('year_lbl')}</div></div>
+        <div class="dm-item"><div class="dm-val">${d.patients}</div><div class="dm-lbl">${t('patient_lbl')}</div></div>
+        <div class="dm-item"><div class="dm-val">${d.rating}</div><div class="dm-lbl">${t('rating')}</div></div>
+      </div>
+      <button class="btn-book" onclick="goBook('${d.id}')">${t('tab_book')} →</button>
+    </div>`).join('');
+}
+function goBook(docId){
+  bk.doc=docId;
+  cTabByName('booking');
+  renderBkForm();
+}
+
+// Services
+function renderServices(){
+  const clockSvg=`<svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>`;
+  const toothSvg=`<svg viewBox="0 0 24 24"><path d="M12 2C9.5 2 7.5 4 7.5 4S6 2 4.5 2C2.5 2 1 3.8 1 6c0 4.5 5 9 11 14C18 15 23 10.5 23 6c0-2.2-1.5-4-3.5-4C18 2 16.5 4 16.5 4S14.5 2 12 2z"/></svg>`;
+  const isRu=currentLang==='ru';const fp=t('free_price');
+  document.getElementById('svcList').innerHTML=SERVICES.map(cat=>`
+    <div class="svc-section">
+      <div class="svc-cat-header">
+        <div class="svc-cat-icon">${cat.icon}</div>
+        <div>
+          <div class="svc-cat-title">${isRu?cat.catRu:cat.cat}</div>
+          <div class="svc-cat-count">${cat.items.length} ${isRu?'услуг':'қызмет'}</div>
+        </div>
+      </div>
+      <div class="svc-grid">
+        ${cat.items.map(s=>{
+          const sn=isRu?s.nameRu:s.name;
+          const dur=isRu?s.durRu:s.dur;
+          const price=s.price==='Тегін'?fp:s.price;
+          return`<div class="svc-card" onclick="cTabByName('booking');setTimeout(()=>{const chips=document.querySelectorAll('#bkSvcChips .chip');chips.forEach(c=>{if(c.dataset.svc==='${s.name}'){bkSvc('${s.name}',c);}});},120)">
+            <div class="svc-card-top">
+              <div class="svc-icon-wrap">${toothSvg}</div>
+              <div class="svc-card-body"><div class="svc-name">${sn}</div><div class="svc-desc">${t('svc_prof_desc')}</div></div>
+            </div>
+            <div class="svc-card-footer">
+              <span class="svc-dur-badge">${clockSvg}${dur}</span>
+              <span class="svc-price ${s.price==='Тегін'?'free':''}">${price}</span>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`).join('');
+}
+
+// Booking
+function renderBkForm(){
+  const docs=getDoctors();const isRu=currentLang==='ru';
+  const allSvcs=SERVICES.flatMap(c=>c.items.map(i=>({kk:i.name,ru:i.nameRu})));
+  const seen=new Set();
+  const uniq=allSvcs.filter(s=>{if(seen.has(s.kk))return false;seen.add(s.kk);return true;});
+  document.getElementById('bkSvcChips').innerHTML=uniq.map(s=>`
+    <button class="chip ${bk.svc===s.kk?'sel':''}" data-svc="${s.kk}" onclick="bkSvc('${s.kk}',this)">${isRu?s.ru:s.kk}</button>`).join('');
+  document.getElementById('bkDocChips').innerHTML=docs.map(d=>`
+    <button class="chip ${bk.doc===d.id?'sel':''}" onclick="bkDoc('${d.id}',this)">${d.name.split(' ')[0]}</button>`).join('');
+  renderBkDates();renderBkTimes();
+}
+function bkSvc(s,el){bk.svc=s;document.querySelectorAll('#bkSvcChips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function bkDoc(id,el){bk.doc=id;document.querySelectorAll('#bkDocChips .chip').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function renderBkDates(){
+  const days=t('days');const today=new Date();const cells=[];
+  for(let i=0;i<14;i++){
+    const d=new Date(today);d.setDate(today.getDate()+i);
+    const ds=d.getDate()+'.'+(d.getMonth()+1)+'.'+d.getFullYear();
+    cells.push(`<div class="date-cell ${bk.date===ds?'sel':''}" onclick="bkDate('${ds}',this)">
+      <div class="dn">${days[d.getDay()]}</div><div class="dd">${d.getDate()}</div>
+    </div>`);
+  }
+  document.getElementById('bkDateGrid').innerHTML=cells.join('');
+}
+function bkDate(d,el){bk.date=d;document.querySelectorAll('.date-cell').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');renderBkTimes();}
+function renderBkTimes(){
+  const times=['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'];
+  const busy=DB.appointments.filter(a=>a.docId===bk.doc&&a.date===bk.date&&a.status!=='cancelled').map(a=>a.time);
+  document.getElementById('bkTimeGrid').innerHTML=times.map(tm=>{
+    const isBusy=busy.includes(tm);const isSel=bk.time===tm&&!isBusy;
+    return`<div class="time-cell ${isBusy?'busy':''} ${isSel?'sel':''}" onclick="${isBusy?'':'bkTime(\''+tm+'\',this)'}">
+      ${tm}${isBusy?`<br><span style="font-size:7px">${t('busy_slot')}</span>`:''}
+    </div>`;}).join('');
+}
+function bkTime(tm,el){bk.time=tm;document.querySelectorAll('.time-cell:not(.busy)').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');}
+function doBook(){
+  if(!currentUser){pendingClientTarget='booking';openAuthModal('register');toast(t('t_login_first'));return;}
+  if(!bk.svc){toast(t('t_choose_svc'));return;}
+  if(!bk.doc){toast(t('t_choose_doc'));return;}
+  if(!bk.date){toast(t('t_choose_date'));return;}
+  if(!bk.time){toast(t('t_choose_time'));return;}
+  const doc=getDoctors().find(d=>d.id===bk.doc);
+  const isRu=currentLang==='ru';
+  const svcObj=SERVICES.flatMap(c=>c.items).find(s=>s.name===bk.svc);
+  const svcDisplay=isRu&&svcObj?svcObj.nameRu:bk.svc;
+  const apt={id:Date.now(),clientId:currentUser.id,client:currentUser.fullName,
+    phone:currentUser.phone,docId:bk.doc,service:bk.svc,date:bk.date,time:bk.time,status:'confirmed'};
+  DB.appointments.push(apt);saveDB();
+  const cf=document.getElementById('bkConfirm');
+  cf.style.display='block';
+  cf.innerHTML=`<div class="confirm-box">
+    <div class="confirm-check"><svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg></div>
+    <h3>${t('book_confirmed')}</h3><p>${t('book_confirmed_sub')}</p>
+    <div class="confirm-rows">
+      <div class="cr"><span class="crl">${t('svc_lbl')}</span><span class="crv">${svcDisplay}</span></div>
+      <div class="cr"><span class="crl">${t('doctor_lbl')}</span><span class="crv">${doc.name}</span></div>
+      <div class="cr"><span class="crl">${t('date_lbl')}</span><span class="crv">${bk.date}</span></div>
+      <div class="cr"><span class="crl">${t('time_lbl')}</span><span class="crv">${bk.time}</span></div>
+      <div class="cr"><span class="crl">${t('room_lbl')}</span><span class="crv">Абай 15, каб.204</span></div>
+    </div>
+    <button onclick="cTabByName('myapts')" style="width:100%;padding:12px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:13px;font-weight:700;margin-top:4px;cursor:pointer">${t('book_new')}</button>
+  </div>`;
+  cf.scrollIntoView({behavior:'smooth'});toast(t('t_book_ok'));
+  bk={svc:null,doc:null,date:null,time:null};
+  updateAptNotif();
+  setTimeout(()=>{renderBkForm();},100);
+}
+
+function renderMyApts(){
+  if(!currentUser)return;
+  const mine=DB.appointments.filter(a=>a.clientId===currentUser.id&&a.status!=='cancelled');
+  const allMine=DB.appointments.filter(a=>a.clientId===currentUser.id);
+  const isRu=currentLang==='ru';
+  const profileHTML=`
+    <div class="profile-card" style="margin-bottom:16px">
+      <div class="profile-card-inner">
+        <div class="profile-avatar-big">${currentUser.fname[0].toUpperCase()}</div>
+        <div class="profile-info">
+          <div class="profile-name">${currentUser.fullName}</div>
+          <div class="profile-phone">
+            <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            ${currentUser.phone}
+          </div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div class="ps-item"><div class="ps-n">${mine.length}</div><div class="ps-l">${isRu?'АКТИВНЫХ':'БЕЛСЕНДІ'}</div></div>
+        <div class="ps-item"><div class="ps-n">${allMine.filter(a=>a.status==='done').length}</div><div class="ps-l">${isRu?'ЗАВЕРШЕНО':'АЯҚТАЛДЫ'}</div></div>
+        <div class="ps-item"><div class="ps-n">${allMine.length}</div><div class="ps-l">${isRu?'ВСЕГО':'БАРЛЫҒЫ'}</div></div>
+      </div>
+    </div>`;
+  const container=document.getElementById('myAptList');
+  if(!mine.length){
+    container.innerHTML=profileHTML+`<div class="empty-state">
+      <div class="es-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
+      <div class="es-title">${t('no_apts')}</div><p>${t('no_apts_sub')}</p>
+      <button onclick="cTabByName('booking')" style="margin-top:16px;padding:12px 24px;background:linear-gradient(135deg,var(--red),#8b0000);border:none;border-radius:11px;color:white;font-size:13px;font-weight:700;cursor:pointer">${t('book_new')}</button>
+    </div>`;
+    return;
+  }
+  const months=t('months_short');
+  const aptCardsHTML=mine.map(a=>{
+    const doc=getDoctors().find(d=>d.id===a.docId)||{name:t('doctor_lbl')};
+    const parts=a.date.split('.');
+    const svcObj=SERVICES.flatMap(c=>c.items).find(s=>s.name===a.service);
+    const svcDisplay=isRu&&svcObj?svcObj.nameRu:a.service;
+    const statusMap={confirmed:t('status_confirmed'),done:t('status_done'),cancelled:t('status_cancelled')};
+    const statusClass={confirmed:'confirmed',done:'done',cancelled:'pending'};
+    return`<div class="apt-card">
+      <div class="apt-date-block">
+        <div class="adb-d">${parts[0]}</div>
+        <div class="adb-m">${months[parseInt(parts[1])-1]||parts[1]}</div>
+      </div>
+      <div class="apt-info">
+        <div class="apt-svc">${svcDisplay}</div>
+        <div class="apt-meta">
+          <div class="apt-chip">👨‍⚕️ ${doc.name}</div>
+          <div class="apt-chip">🕐 ${a.time}</div>
+          <div class="apt-chip">📍 каб.204</div>
+        </div>
+        ${a.status==='confirmed'?`<button class="btn-cancel" onclick="cancelApt(${a.id})">${t('cancel_apt')}</button>`:''}
+      </div>
+      <div class="apt-right">
+        <div class="apt-status ${statusClass[a.status]||'confirmed'}">${statusMap[a.status]||''}</div>
+      </div>
+    </div>`;
+  }).join('');
+  container.innerHTML=profileHTML+`<div style="font-size:10px;font-weight:700;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px">${isRu?'МОИ ЗАПИСИ':'МЕНІҢ ЖАЗЫЛЫМДАРЫМ'}</div>`+aptCardsHTML;
+}
+
+function cancelApt(id){
+  const a=DB.appointments.find(x=>x.id===id);if(a)a.status='cancelled';
+  saveDB();renderMyApts();updateAptNotif();toast(t('t_apt_cancelled'));
+}
+
+// ==================== DOCTOR APP ====================
+function launchDoctorApp(){
+  seedDemoApts();
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('doctorApp').classList.add('active');
+  document.getElementById('dNavName').textContent=isAdmin()?'Admin':currentDoctor.name.split(' ')[0];
+  document.getElementById('dNavAvatar').textContent=currentDoctor.name[0];
+  document.getElementById('dHeaderTitle').textContent=currentDoctor.name;
+  document.getElementById('dHeaderSub').textContent=currentDoctor.spec;
+  const av=document.getElementById('dHeaderAvatar');
+  if(currentDoctor.photo)av.innerHTML=`<img src="${currentDoctor.photo}" alt="${currentDoctor.name}">`;
+  else av.textContent=currentDoctor.name[0];
+  const admin=isAdmin();
+  document.getElementById('adminTabsRow').style.display=admin?'block':'none';
+  document.getElementById('chiefBadge').style.display='none';
+  document.getElementById('docAdminView').style.display='none';
+  document.getElementById('docAptsView').style.display='block';
+  applyI18n();updateTodayDate();renderDStats();renderDApts('all');
+  if(admin)renderAdminDocs();
+}
+
+function updateTodayDate(){
+  const now=new Date();
+  const months=t('months_full');const dayNames=t('day_full_names');
+  document.getElementById('todayDateStr').textContent=now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+  document.getElementById('todayDayStr').textContent=dayNames[now.getDay()];
+}
+
+function dAppMode(mode,btn){
+  if(mode==='admin'&&!isAdmin()){toast(t('t_access_denied'));return;}
+  document.querySelectorAll('#adminTabsRow .d-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('docAptsView').style.display=mode==='apts'?'block':'none';
+  document.getElementById('docAdminView').style.display=mode==='admin'?'block':'none';
+  if(mode==='admin')renderAdminDocs();
+}
+
+function renderDStats(){
+  const todayStr=new Date().getDate()+'.'+(new Date().getMonth()+1)+'.'+new Date().getFullYear();
+  // Admin sees all, doctor sees only their own
+  const mine=DB.appointments.filter(a=>{
+    if(a.status==='cancelled')return false;
+    return isAdmin()?true:a.docId===currentDoctor.id;
+  });
+  const todayAll=mine.filter(a=>a.date===todayStr);
+  const todayDone=todayAll.filter(a=>a.status==='done').length;
+  const todayLeft=todayAll.length-todayDone;
+  document.getElementById('dStatRow').innerHTML=`
+    <div class="d-stat red"><div class="dsn">${todayAll.length}</div><div class="dsl">${t('today_stat')}</div></div>
+    <div class="d-stat green"><div class="dsn">${todayDone}</div><div class="dsl">${t('done_stat')}</div></div>
+    <div class="d-stat blue"><div class="dsn">${todayLeft}</div><div class="dsl">${t('left_stat')}</div></div>
+    <div class="d-stat"><div class="dsn">${mine.length}</div><div class="dsl">${t('total_stat')}</div></div>`;
+}
+
+function dFilter(f,btn){
+  document.querySelectorAll('#dFilterTabs .d-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');btn.dataset.filter=f;renderDApts(f);
+}
+
+function normalizeWaPhone(phone){
+  let p=String(phone||'').replace(/\D/g,'');
+  if(p.length===10)p='7'+p;
+  if(p.length===11&&p[0]==='8')p='7'+p.slice(1);
+  return p;
+}
+
+function appointmentWaText(a,svcDisplay){
+  const aptDoc=getDoctors().find(d=>d.id===a.docId);
+  const doc=aptDoc?aptDoc.name:(currentDoctor?currentDoctor.name:'дәрігер');
+  const msg=currentLang==='ru'
+    ?`Здравствуйте, ${a.client}! У вас запись ${a.date} в ${a.time}. Услуга: ${svcDisplay}. Врач: ${doc}. Адрес: Абай 15, каб.204.`
+    :`Сәлеметсіз бе, ${a.client}! Сізде ${a.date} күні сағат ${a.time}-да запись бар. Қызмет: ${svcDisplay}. Дәрігер: ${doc}. Мекенжай: Абай 15, каб.204.`;
+  return encodeURIComponent(msg);
+}
+
+function renderDApts(filter){
+  const todayStr=new Date().getDate()+'.'+(new Date().getMonth()+1)+'.'+new Date().getFullYear();
+  // KEY CHANGE: doctor only sees their own appointments; admin sees all
+  let mine=DB.appointments.filter(a=>{
+    if(a.status==='cancelled')return false;
+    return isAdmin()?true:a.docId===currentDoctor.id;
+  });
+  if(filter==='today')mine=mine.filter(a=>a.date===todayStr);
+  else if(filter==='done')mine=mine.filter(a=>a.status==='done');
+  else if(filter==='upcoming')mine=mine.filter(a=>a.status==='confirmed');
+  mine.sort((a,b)=>{if(a.date!==b.date)return a.date.localeCompare(b.date);return a.time.localeCompare(b.time);});
+  if(!mine.length){
+    document.getElementById('dAptList').innerHTML=`<div class="empty-state">
+      <div class="es-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
+      <div class="es-title">${t('no_apts_doc')}</div><p>${t('no_apts_doc_sub')}</p>
+    </div>`;return;
+  }
+  const isRu=currentLang==='ru';
+  // WhatsApp button: ONLY for admin
+  document.getElementById('dAptList').innerHTML=mine.map(a=>{
+    const svcObj=SERVICES.flatMap(c=>c.items).find(s=>s.name===a.service);
+    const svcDisplay=isRu&&svcObj?svcObj.nameRu:a.service;
+    const sm={confirmed:t('status_new'),done:t('status_done')};
+    const sc={confirmed:'new',done:'done'};
+    const clientRecord=DB.clients.find(c=>c.id===a.clientId);
+    const phone=a.phone||(clientRecord?clientRecord.phone:null);
+    const waPhone=normalizeWaPhone(phone);
+    const waHref=waPhone.length>=10?`https://wa.me/${waPhone}?text=${appointmentWaText(a,svcDisplay)}`:'';
+    const aptDoc=getDoctors().find(d=>d.id===a.docId);
+    // Only admin can send WhatsApp
+    const showWa=isAdmin();
+    return`<div class="d-apt">
+      <div class="d-apt-time"><div class="dat">${a.time}</div><div class="dad">${a.date}</div></div>
+      <div class="d-apt-info">
+        <h4>${a.client}</h4>
+        ${phone?`<div class="d-apt-patient-info"><span class="d-apt-phone">📞 ${phone}</span></div>`:''}
+        <p>📍 каб.204</p>
+        <span class="d-apt-svc-badge">${svcDisplay}</span>
+        ${isAdmin()&&aptDoc?`<p style="margin-top:4px;font-size:11px;color:var(--muted)">👨‍⚕️ ${aptDoc.name}</p>`:''}
+      </div>
+      <div class="d-apt-right">
+        <div class="d-status ${sc[a.status]||'coming'}">${sm[a.status]||t('upcoming')}</div>
+        ${showWa?(waHref?`<a class="btn-wa-apt" href="${waHref}" target="_blank">WhatsApp</a>`:`<span class="btn-wa-apt disabled">WA жоқ</span>`):''}
+        ${a.status==='confirmed'?`<button class="btn-done" onclick="markDone(${a.id})">${t('mark_done')}</button>`:''}
+      </div>
+    </div>`;}).join('');
+}
+
+function markDone(id){
+  const a=DB.appointments.find(x=>x.id===id);if(a)a.status='done';saveDB();
+  renderDStats();
+  const activeTab=document.querySelector('#dFilterTabs .d-tab.active');
+  renderDApts(activeTab?activeTab.dataset.filter||'all':'all');
+  toast(t('t_marked_done'));
+}
+
+// ==================== ADMIN ====================
+function renderAdminDocs(){
+  if(!isAdmin())return;
+  const docs=getDoctors();
+  document.getElementById('adminDocList').innerHTML=docs.map(d=>`
+    <div class="admin-doc-card">
+      <div class="admin-doc-photo">
+        ${d.photo?`<img src="${d.photo}" alt="${d.name}" loading="lazy">`:`${d.name[0]}`}
+      </div>
+      <div class="admin-doc-info">
+        <div class="admin-doc-name">${d.name}${d.isChief?` <span style="font-size:9px;color:var(--gold)">★</span>`:''}</div>
+        <div class="admin-doc-spec">${d.spec}</div>
+        <div class="admin-doc-cred"><code>${d.login}</code> / <code>${d.pass}</code></div>
+      </div>
+      <div class="admin-doc-actions">
+        <button class="btn-edit-doc" onclick="openEditDoc('${d.id}')">${t('edit_btn')}</button>
+        ${d.isChief?'':`<button class="btn-del-doc" onclick="confirmDeleteDoc('${d.id}')">${t('del_btn')}</button>`}
+      </div>
+    </div>`).join('');
+}
+
+function openAddDoc(){
+  if(!isAdmin()){toast(t('t_access_denied'));return;}
+  editingDocId=null;
+  ['m-fname','m-lname','m-spec','m-tag','m-about','m-exp','m-patients','m-photo','m-login','m-pass'].forEach(id=>{document.getElementById(id).value='';});
+  document.getElementById('modalTitle').textContent=t('modal_add_title');
+  document.getElementById('docModal').style.display='flex';
+}
+
+function openEditDoc(docId){
+  if(!isAdmin()){toast(t('t_access_denied'));return;}
+  editingDocId=docId;
+  const d=getDoctors().find(x=>x.id===docId);if(!d)return;
+  const parts=d.name.split(' ');
+  document.getElementById('m-fname').value=parts[0]||'';
+  document.getElementById('m-lname').value=parts.slice(1).join(' ')||'';
+  document.getElementById('m-spec').value=d.spec||'';
+  document.getElementById('m-tag').value=d.tag||'';
+  document.getElementById('m-about').value=d.about||'';
+  document.getElementById('m-exp').value=d.exp||'';
+  document.getElementById('m-patients').value=d.patients||'';
+  document.getElementById('m-photo').value=d.photo||'';
+  document.getElementById('m-login').value=d.login||'';
+  document.getElementById('m-pass').value=d.pass||'';
+  document.getElementById('modalTitle').textContent=t('modal_edit_title');
+  document.getElementById('docModal').style.display='flex';
+}
+
+function closeModal(){document.getElementById('docModal').style.display='none';editingDocId=null;}
+
+function saveDoc(){
+  if(!isAdmin()){toast(t('t_access_denied'));closeModal();return;}
+  const fname=document.getElementById('m-fname').value.trim();
+  const lname=document.getElementById('m-lname').value.trim();
+  const spec=document.getElementById('m-spec').value.trim();
+  const tag=document.getElementById('m-tag').value.trim();
+  const about=document.getElementById('m-about').value.trim();
+  const exp=parseInt(document.getElementById('m-exp').value)||0;
+  const patients=parseInt(document.getElementById('m-patients').value)||0;
+  const photo=document.getElementById('m-photo').value.trim();
+  const login=document.getElementById('m-login').value.trim();
+  const pass=document.getElementById('m-pass').value.trim();
+  if(!fname||!lname||!spec||!login||!pass){toast(t('t_fill_all'));return;}
+  if(getDoctors().find(d=>d.login===login&&d.id!==editingDocId)){toast(t('t_login_exists'));return;}
+  if(editingDocId){
+    const idx=DB.doctors.findIndex(d=>d.id===editingDocId);
+    if(idx>=0){
+      DB.doctors[idx]={...DB.doctors[idx],name:fname+' '+lname,spec,tag,about,exp,patients,photo,login,pass};
+      saveDB();
+      if(currentDoctor&&currentDoctor.id===editingDocId)currentDoctor=DB.doctors[idx];
+      toast(t('t_doc_updated'));
+    }
+  }else{
+    DB.doctors.push({id:'doc_'+Date.now(),login,pass,name:fname+' '+lname,spec,tag,tagClass:'',about,exp,patients,rating:5.0,photo,isChief:false});
+    saveDB();toast(t('t_doc_added'));
+  }
+  closeModal();renderAdminDocs();buildDocCredentials();
+}
+
+let pendingDeleteDocId=null;
+function confirmDeleteDoc(docId){
+  if(!isAdmin()){toast(t('t_access_denied'));return;}
+  const d=getDoctors().find(x=>x.id===docId);if(!d)return;
+  if(d.isChief||d.id==='ayazhan'){toast(t('t_cannot_del_self'));return;}
+  pendingDeleteDocId=docId;
+  document.getElementById('deleteDocName').textContent=d.name;
+  document.getElementById('deleteModal').style.display='flex';
+  document.getElementById('confirmDelBtn').onclick=function(){
+    if(!isAdmin()){toast(t('t_access_denied'));closeDeleteModal();return;}
+    DB.doctors=DB.doctors.filter(x=>x.id!==pendingDeleteDocId);
+    saveDB();closeDeleteModal();renderAdminDocs();buildDocCredentials();
+    toast(t('t_doc_deleted'));
+  };
+}
+function closeDeleteModal(){document.getElementById('deleteModal').style.display='none';pendingDeleteDocId=null;}
+
+// ==================== UTILS ====================
+function openLink(url){window.open(url,'_blank');}
+function toggleSection(showId,hideId){
+  const show=document.getElementById(showId),hide=document.getElementById(hideId);
+  if(hide)hide.style.display='none';
+  if(show)show.style.display=show.style.display==='none'||!show.style.display?'block':'none';
+}
+function toast(msg){
+  let el=document.getElementById('toastEl');
+  el.textContent=msg;el.classList.add('show');
+  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),2400);
+}
+
+// ==================== INIT ====================
+// Start in public client mode
+(function init(){
+  applyI18n();
+  renderDoctors();renderServices();renderBkForm();renderBAGrid('all');
+  updateNavAuthLabels();
+  cTabByName('home');
+})();
+</script>
+</body>
+</html>
